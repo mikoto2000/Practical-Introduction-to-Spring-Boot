@@ -20,4 +20,17 @@ export default defineConfig({
       },
     ],
   },
+  sidebar: {
+    '/docs/': [
+      {
+        text: 'はじめに',
+        items: [
+          {
+            text: 'はじめに',
+            link: '/introduction.md',
+          }
+        ],
+      }
+    ]
+  }
 });

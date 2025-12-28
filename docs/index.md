@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: ドキュメントを見る
-      link: contents-list
+      link: introduction
   image:
     src: /spring.svg
     alt: Logo
