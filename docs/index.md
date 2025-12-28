@@ -9,4 +9,7 @@ hero:
     - theme: brand
       text: ドキュメントを見る
       link: contents-list
+  image:
+    src: /spring.svg
+    alt: Logo
 ---
