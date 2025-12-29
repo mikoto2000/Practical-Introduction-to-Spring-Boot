@@ -19,18 +19,5 @@ export default defineConfig({
         content: 'https://github.com/mikoto2000/Practical-Introduction-to-Spring-Boot',
       },
     ],
-  },
-  sidebar: {
-    '/docs/': [
-      {
-        text: 'はじめに',
-        items: [
-          {
-            text: 'はじめに',
-            link: '/introduction.md',
-          }
-        ],
-      }
-    ]
   }
 });
