@@ -3,6 +3,7 @@ import { defineConfig } from 'rspress/config';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
+  base: '/Practical-Introduction-to-Spring-Boot/',
   title: 'Spring Boot 実践入門',
   icon: '/spring.svg',
   logo: {
@@ -19,5 +20,6 @@ export default defineConfig({
         content: 'https://github.com/mikoto2000/Practical-Introduction-to-Spring-Boot',
       },
     ],
+    sidebar: false,
   }
 });
