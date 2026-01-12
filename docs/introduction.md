@@ -1,6 +1,5 @@
 ---
 title: はじめに
-sidebar: false
 ---
 
 # はじめに
@@ -14,6 +13,6 @@ sidebar: false
 ## コンテンツ一覧
 
 1. [はじめに](introduction.md)
-1. [Spring Boot プロジェクト作成・デプロイ入門](./プロジェクト作成・デプロイ入門/プロジェクト作成・デプロイ入門.md)
-1. [Spring Boot バリデーション入門](./バリデーション入門/バリデーション入門.md)
-1. [Spring Boot テスト入門](./テスト入門/テスト入門.md)
+1. [Spring Boot プロジェクト作成・デプロイ入門](./シリーズ:SpringBoot入門/プロジェクト作成・デプロイ入門.md)
+1. [Spring Boot バリデーション入門](./シリーズ:SpringBoot入門/バリデーション入門.md)
+1. [Spring Boot テスト入門](./シリーズ:SpringBoot入門/テスト入門.md)
