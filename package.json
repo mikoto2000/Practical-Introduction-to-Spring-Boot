@@ -11,7 +11,6 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "rsbuild-plugin-google-analytics": "^1.0.5",
     "rspress": "^1.40.2"
   },
   "devDependencies": {
@@ -21,6 +20,7 @@
     "eslint": "^9.19.0",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
+    "rsbuild-plugin-google-analytics": "^1.0.5",
     "typescript-eslint": "^8.22.0"
   }
 }
