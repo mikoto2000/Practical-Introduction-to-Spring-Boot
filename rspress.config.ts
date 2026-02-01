@@ -1,8 +1,14 @@
 import * as path from 'node:path';
 import { defineConfig } from 'rspress/config';
+import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 
 export default defineConfig({
+  plugins: [
+    pluginSitemap({
+      siteUrl: 'https://github.com/mikoto2000/Practical-Introduction-to-Spring-Boot/',
+    }),
+  ],
   root: path.join(__dirname, 'docs'),
   base: '/Practical-Introduction-to-Spring-Boot/',
   title: 'Spring Boot 実践入門',
@@ -22,9 +28,11 @@ export default defineConfig({
       },
     ],
   },
-  builderPlugins: [
-    pluginGoogleAnalytics({
-      id: 'G-RTY3TRXY5T',
-    }),
-  ],
+  builderConfig: {
+    plugins: [
+      pluginGoogleAnalytics({
+        id: 'G-RTY3TRXY5T',
+      }),
+    ],
+  },
 });
