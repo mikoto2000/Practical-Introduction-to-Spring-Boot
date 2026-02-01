@@ -11,6 +11,7 @@
     "preview": "rspress preview"
   },
   "dependencies": {
+    "rsbuild-plugin-google-analytics": "^1.0.5",
     "rspress": "^1.40.2"
   },
   "devDependencies": {
