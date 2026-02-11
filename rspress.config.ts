@@ -32,6 +32,7 @@ export default defineConfig({
         { text: 'プロジェクト作成・デプロイ入門', link: '/シリーズ:SpringBoot入門/プロジェクト作成・デプロイ入門' },
         { text: 'バリデーション入門', link: '/シリーズ:SpringBoot入門/バリデーション入門' },
         { text: 'テスト入門', link: '/シリーズ:SpringBoot入門/テスト入門' },
+        { text: 'ロギング門', link: '/シリーズ:SpringBoot入門/ロギング入門' },
         { text: 'DB マイグレーション入門', link: '/シリーズ:SpringBoot入門/DBマイグレーション入門' },
       ],
       '/シリーズ:SpringSecurity入門': [

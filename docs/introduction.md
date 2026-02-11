@@ -16,6 +16,7 @@ title: はじめに
 1. [Spring Boot プロジェクト作成・デプロイ入門](./シリーズ:SpringBoot入門/プロジェクト作成・デプロイ入門.md)
 1. [Spring Boot バリデーション入門](./シリーズ:SpringBoot入門/バリデーション入門.md)
 1. [Spring Boot テスト入門](./シリーズ:SpringBoot入門/テスト入門.md)
+1. [Spring Boot ロギング入門](./シリーズ:SpringBoot入門/ロギング入門.md)
 1. [DB マイグレーション入門](./シリーズ:SpringBoot入門/DBマイグレーション入門.md)
 1. Spring Boot セキュリティ入門
     1. [Spring Boot Security ワークショップ 第一回](./シリーズ:SpringSecurity入門/Vol1.md)
