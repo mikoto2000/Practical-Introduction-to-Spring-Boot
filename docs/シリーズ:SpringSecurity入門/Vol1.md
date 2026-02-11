@@ -1,14 +1,14 @@
 ---
-title: Spring Boot Security ワークショップ 第一回
+title: Spring Boot Security ハンズオン 第一回
 ---
 
-# Spring Boot Security ワークショップ 第一回
+# Spring Boot Security ハンズオン 第一回
 
 ## ベースプロジェクト
 
 [spring-boot-security-workshop-base.zip](https://github.com/mikoto2000/spring-boot-security-workshop/releases/download/v1.0.0/spring-boot-security-workshop-base.ziphttps://github.com/mikoto2000/spring-boot-security-workshop/releases/download/v1.0.0/spring-boot-security-workshop-base.zip) をダウンロードし、展開してください。
 
-本ワークショップでは、このベースプロジェクトを元に Spring Security のカスタマイズを行っていきます。
+本ハンズオンでは、このベースプロジェクトを元に Spring Security のカスタマイズを行っていきます。
 
 
 ## インデックスページの作成
@@ -70,7 +70,7 @@ This generated password is for development use only. Your security configuration
 
 `http://localhost:8080` を開くとログインフォームが表示されるので、ユーザー名: `user`, パスワード: `<起動時に表示されたパスワード>` でログインし、インデックスページが表示されれば OK です。
 
-もちろんこれでは業務要件を満たすわけないので、これからワークショップで行うようなカスタマイズをしていくこととなります。
+もちろんこれでは業務要件を満たすわけないので、これからハンズオンで行うようなカスタマイズをしていくこととなります。
 
 
 ## ログインユーザー取得ロジックのカスタマイズ
@@ -132,7 +132,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 今回は仕組み理解が目的のため、DB ではなく HashMap を使って最小構成で実装していますが、
 本格的に実装するなら `loadUserByUsername` の中で DB 接続してユーザー情報を検索し、返却することになります。
 
-これはワークショップの後半でやってみましょう。
+これはハンズオンの後半でやってみましょう。
 
 また、パスワードについても、デフォルトで対応している `bcrypt` 形式でハッシュ化された文字列を使っています。
 ここもカスタマイズポイントですので、後の方で取り上げます。
@@ -311,7 +311,7 @@ Spring Security が提供するデフォルトでは、 `/logout` にアクセ�
 
 前述の通り、ログアウトは `/logout` への `POST` リクエストで実行されるため、
 自作のフォームから(ログアウト画面を介さず)ログアウトさせることも可能です。
-このあたりのカスタマイズはワークショップの後の方でやりましょう。
+このあたりのカスタマイズはハンズオンの後の方でやりましょう。
 
 
 ### ログアウト用リンクの追加
