@@ -4,7 +4,17 @@
       "extensions": [".md"]
     }
   },
+  "filters": {
+    "comments": true
+  },
   "rules": {
-    "preset-ja-technical-writing": true
+    "preset-ja-technical-writing": {
+      "sentence-length": {
+        "max": 120
+      },
+      "ja-no-mixed-period": {
+        "allowPeriodMarks": [":", "："]
+      }
+    }
   }
 }

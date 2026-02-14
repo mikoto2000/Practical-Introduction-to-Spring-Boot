@@ -58,7 +58,7 @@ H2 コンソールのログイン画面が開くので、 `application.yaml` に
 
 ## 初期スキーマの作成
 
-`src/main/resources/db/migration` に DDL を格納することで、 Spring Boot アプリケーション起動時に Flyway が走り、マイグレーションを行ってくれます。
+`src/main/resources/db/migration` に DDL を格納すると、 Spring Boot アプリケーション起動時に Flyway が走り、マイグレーションしてくれます。
 (`src/main/resources/db/migration` は Flyway のデフォルト探索パス)
 
 今回は `ACCOUNT` テーブルを作ってみましょう。
@@ -77,8 +77,8 @@ CREATE TABLE ACCOUNT (
 
 :::note
 今回は、可読性を重視して「日付.連番」形式を採用しています。
-命名規則については、「タイムスタンプ」や「セマンティックバージョニング」など
-色々ありますので、プロジェクトの特性や運用条件に応じて選ぶようにしましょう。
+命名規則には、「タイムスタンプ」や「セマンティックバージョニング」などがあります。
+プロジェクトの特性や運用条件に応じて選びましょう。
 ※ チーム内でルールを統一することが重要です。
 :::
 
@@ -107,7 +107,7 @@ CREATE TABLE ACCOUNT (
 
 テーブル一覧にテーブル `ACCOUNT` が存在していることを確認してください。
 
-また、テーブル `flyway_schema_history` が存在していることに気付いた方もいるかもしれません。
+また、テーブル `flyway_schema_history` が存在していることに気付いた方もいるでしょう。
 このテーブルは、 Flyway が行ったマイグレーションの履歴を管理するためのテーブルです。
 消したり手動で変更したりしないようにしましょう。
 
@@ -119,7 +119,7 @@ CREATE TABLE ACCOUNT (
 
 ## スキーマの更新ファイル作成
 
-それではさっそく、「仕様変更でテーブル `ACCOUNT` にカラム `ROLE` が必要になった」という想定で、
+それではさっそく、「仕様変更でテーブル `ACCOUNT` にカラム `ROLE` が必要となった」という想定で、
 新しいマイグレーションファイルを作成してみましょう。
 
 `src/main/resources/db/migration/V20260203.02__add_role_column_to_account_table.sql`:
@@ -146,10 +146,10 @@ Spring Boot 起動時に Flyway が自動実行されるため、新しいマイ
 
 ## 並行開発に向けたマイグレーション運用例紹介
 
-スキーマに厳密なプロジェクトでは、
+スキーマに厳密なプロジェクトでは、次のような運用がされています。
+
 「実装中は draft ディレクトリにマイグレーションファイルを作り、
-レビュー後に migration ディレクトリに移動させてマージするという運用する」
-という運用がされています。
+レビュー後、 migration ディレクトリに移動させてマージするという運用する」
 
 ```
 feature branch を作成
@@ -190,5 +190,3 @@ Pull Request をマージ
     - [Expand and Contract パターンによる破壊的変更の段階的適用](https://zenn.dev/babyjob/articles/4bfe61d366c6c0)
     - [スキーマの変更をデプロイする方法 - そこに仁義はあるのか(仮)](https://syobochim.hatenablog.com/entry/2020/05/20/084736)
     - [データベースを止めずにテーブル設計を変更したい](https://zenn.dev/praha/articles/abceef00258275)
-
-

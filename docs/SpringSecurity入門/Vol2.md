@@ -6,7 +6,7 @@ title: Spring Boot Security ハンズオン 第二回
 
 ## はじめに
 
-前回は、次の作業を行ってきました。
+前回は、次の作業を進めてきました。
 
 - プロジェクトの作成
 - デフォルト時の動作確認
@@ -14,8 +14,8 @@ title: Spring Boot Security ハンズオン 第二回
 - 認可のカスタマイズ
 - ログアウトの実装
 
-これで、基本的な「ユーザー名とパスワードを用いたログイン」のカスタマイズポイントがわかってきたと思います。
-今回は、次の作業を行っていきます。
+これで、基本的な「ユーザー名とパスワードを用いたログイン」のカスタマイズポイントがわかってきたはずです。
+今回は、次の作業を進めます。
 
 - ログイン・ログアウトのカスタマイズ
 - DB からユーザー情報を取得するように修正
@@ -137,7 +137,7 @@ public class LoginController {
 
 今回は、ログアウト確認画面を表示せず、ログアウトボタンを押下したらすぐにログアウトするようにします。
 
-第一回でも述べた通り、 Spring Security のデフォルトでは `/logout` に `POST` リクエストを送ることでログアウトを行います。
+第1回でも述べた通り、 Spring Security のデフォルトでは `/logout` に `POST` リクエストを送ることでログアウトします。
 
 CSRF 対策のため、 Thymeleaf の機能を用いて `form` を構築します。
 (`th:action` を使用すると、 form に自動で CSRF 対策のパラメーターが挿入される)
@@ -205,8 +205,12 @@ CSRF 対策のため、 Thymeleaf の機能を用いて `form` を構築しま�
 
 #### テーブル定義
 
+<!-- textlint-disable -->
+
 ユーザー情報を格納するテーブルは、 `USERS` テーブルとして定義しています。
 CREATE 文は `src/main/resources/schema.sql`, データは `src/main/resources/data.sql` で確認できます。
+
+<!-- textlint-enable -->
 
 role カラムを用意していますが、本格的な RBAC（ロール設計・権限設計）までは扱いません。
 
@@ -363,13 +367,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 それでは、 DB にユーザー情報を登録してみましょう。
 
-HashMap や DB のデータ定義を見た方は気付いたと思いますが、Spring Security ではパスワードをハッシュ化して保持しています。
+HashMap や DB のデータ定義を見た方は気付いたはずですが、Spring Security ではパスワードをハッシュ化して保持しています。
 
 ここではユーザー情報を作成し、パスワードをハッシュ化したうえで USERS テーブルに入れるようにコードを修正していきます。
 
 ### Spring Security 設定の変更・追加
 
-SecurityConfig に、以下の修正を行います。
+SecurityConfig に、以下の修正を加えます。
 
 - `/signup` ページに誰でもアクセスできるようにする
 - ユーザー作成時に使用する `PasswordEncoder` を Bean 定義する
@@ -561,7 +565,7 @@ public class SignupController {
 }
 ```
 
-GET リクエストでサインアップページを表示し、そこから POST リクエストを受け取ることでユーザー登録を行います。
+GET リクエストでサインアップページを表示し、そこから POST リクエストを受け取ることでユーザー登録します。
 
 ユーザー登録では、 DI した `PasswordEncoder` を利用しパスワードをハッシュ化することで、
 Spring Security が読み込めるハッシュ形式のパスワードを生成します。
@@ -673,7 +677,7 @@ Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6
 
 ### 動作確認
 
-ユーザー登録を行い、登録したユーザーでログインができることを確認しましょう。
+ユーザー登録し、登録したユーザーでログインができることを確認しましょう。
 
 
 ## まとめ
@@ -698,4 +702,3 @@ Vol.2 では、次のことをやりました。
 
 - CSRF
     - [安全なウェブサイトの作り方 - 1.6 CSRF（クロスサイト・リクエスト・フォージェリ） | 情報セキュリティ | IPA 独立行政法人 情報処理推進機構](https://www.ipa.go.jp/security/vuln/websecurity/csrf.html)
-
