@@ -28,21 +28,19 @@ export default defineConfig({
       },
     ],
     sidebar: {
-      '/シリーズ:SpringBoot入門': [
-        { text: 'プロジェクト作成・デプロイ入門', link: '/シリーズ:SpringBoot入門/プロジェクト作成・デプロイ入門' },
-        { text: 'バリデーション入門', link: '/シリーズ:SpringBoot入門/バリデーション入門' },
-        { text: 'ロギング門', link: '/シリーズ:SpringBoot入門/ロギング入門' },
-        { text: 'DB マイグレーション入門', link: '/シリーズ:SpringBoot入門/DBマイグレーション入門' },
-        { text: 'テスト入門', link: '/シリーズ:SpringBoot入門/テスト入門' },
-        { text: '開発者テスト入門 - テストとは？編', link: '/シリーズ:SpringBoot入門/開発者テスト入門 - テストとは？編' },
+      '/SpringBoot入門': [
+        { text: 'プロジェクト作成・デプロイ入門', link: '/SpringBoot入門/プロジェクト作成・デプロイ入門' },
+        { text: 'バリデーション入門', link: '/SpringBoot入門/バリデーション入門' },
+        { text: 'ロギング門', link: '/SpringBoot入門/ロギング入門' },
+        { text: 'DB マイグレーション入門', link: '/SpringBoot入門/DBマイグレーション入門' },
       ],
-      '/シリーズ:SpringBootテスト入門': [
-        { text: 'テスト入門', link: '/シリーズ:SpringBootテスト入門/テスト入門' },
-        { text: '開発者テスト入門 - テストとは？編', link: '/シリーズ:SpringBootテスト入門/開発者テスト入門 - テストとは？編' },
+      '/SpringBootテスト入門': [
+        { text: 'テスト入門', link: '/SpringBootテスト入門/テスト入門' },
+        { text: '開発者テスト入門 - テストとは？編', link: '/SpringBootテスト入門/開発者テスト入門_テストとは編' },
       ],
-      '/シリーズ:SpringSecurity入門': [
-        { text: 'Vol1', link: '/シリーズ:SpringSecurity入門/Vol1' },
-        { text: 'Vol2', link: '/シリーズ:SpringSecurity入門/Vol2' },
+      '/SpringSecurity入門': [
+        { text: 'Vol1', link: '/SpringSecurity入門/Vol1' },
+        { text: 'Vol2', link: '/SpringSecurity入門/Vol2' },
       ],
     },
   },
