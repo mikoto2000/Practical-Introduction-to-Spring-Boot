@@ -18,6 +18,7 @@ title: はじめに
 1. Spring Boot テスト入門
     1. [Spring Boot テスト入門](./SpringBootテスト入門/テスト入門.md)
     1. [開発者テスト入門 - テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md)
+    1. [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md)
 1. [Spring Boot ロギング入門](./SpringBoot入門/ロギング入門.md)
 1. [DB マイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md)
 1. Spring Boot セキュリティ入門

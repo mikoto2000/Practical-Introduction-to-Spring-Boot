@@ -37,6 +37,7 @@ export default defineConfig({
       '/SpringBootテスト入門': [
         { text: 'テスト入門', link: '/SpringBootテスト入門/テスト入門' },
         { text: '開発者テスト入門 - テストとは？編', link: '/SpringBootテスト入門/開発者テスト入門_テストとは編' },
+        { text: 'バリデーションテスト', link: '/SpringBootテスト入門/バリデーションテスト' },
       ],
       '/SpringSecurity入門': [
         { text: 'Vol1', link: '/SpringSecurity入門/Vol1' },
