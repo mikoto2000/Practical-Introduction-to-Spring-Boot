@@ -1,28 +1,28 @@
 # Spring Boot 実践入門 website
 
-## Setup
+## セットアップ
 
-Install the dependencies:
+依存関係をインストールします。
 
 ```bash
 npm install
 ```
 
-## Get started
+## はじめ方
 
-Start the dev server:
+開発サーバーを起動します。
 
 ```bash
 npm run dev
 ```
 
-Build the website for production:
+本番用にサイトをビルドします。
 
 ```bash
 npm run build
 ```
 
-Preview the production build locally:
+本番ビルドをローカルでプレビューします。
 
 ```bash
 npm run preview
