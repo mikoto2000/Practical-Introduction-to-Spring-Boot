@@ -6,7 +6,7 @@ title: Spring Boot Security ハンズオン 第二回
 
 ## 概要
 
-Java / Spring Boot における Spring Security の基本を学ぶ勉強会の第二回です。ログイン・ログアウトのカスタマイズ、DB からのユーザー情報取得、ユーザー登録、ロールを用いたアクセス制御（RBAC の触り）を扱います。
+Java / Spring Boot の Spring Security の基本を学ぶ勉強会の第二回です。ログイン・ログアウトのカスタマイズ、DB からのユーザー情報取得、ユーザー登録、ロールを用いたアクセス制御（RBAC の触り）を扱います。
 
 ## 対象読者
 
