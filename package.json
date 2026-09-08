@@ -27,7 +27,7 @@
     "textlint-filter-rule-comments": "^1.3.0",
     "textlint-rule-preset-ja-technical-writing": "^12.0.2",
     "typescript-eslint": "^8.22.0",
-    "rspress-plugin-rst-directives": "../rspress-plugin-rst-directive",
-    "rspress-plugin-plantuml": "../rspress-plugin-plantuml"
+    "rspress-plugin-plantuml": "^0.1.0",
+    "rspress-plugin-rst-directives": "^0.2.0"
   }
 }
