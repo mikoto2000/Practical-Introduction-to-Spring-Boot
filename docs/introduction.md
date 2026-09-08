@@ -24,6 +24,3 @@ title: はじめに
 1. Spring Boot セキュリティ入門
     1. [Spring Boot Security ハンズオン 第一回](./SpringSecurity入門/Vol1.md)
     1. [Spring Boot Security ハンズオン 第二回](./SpringSecurity入門/Vol2.md)
-
-![aaaaa](SpringBootテスト入門/diagrams/aaaaa.svg)
-![Drawing](diagrams/drawing-2.svg)
