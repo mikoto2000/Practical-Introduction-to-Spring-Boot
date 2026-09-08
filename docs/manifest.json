@@ -1,0 +1,22 @@
+{
+  "format": "mdpkg",
+  "version": "2.0",
+  "entrypoint": "index.md",
+  "resources": [
+    {
+      "source": "diagrams/drawing-1.draw.json",
+      "rendered": "diagrams/drawing-1.svg",
+      "type": "drawing"
+    },
+    {
+      "source": "SpringBootテスト入門/diagrams/ccccc.draw.json",
+      "rendered": "SpringBootテスト入門/diagrams/aaaaa.svg",
+      "type": "drawing"
+    },
+    {
+      "source": "diagrams/drawing-2.draw.json",
+      "rendered": "diagrams/drawing-2.svg",
+      "type": "drawing"
+    }
+  ]
+}

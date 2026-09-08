@@ -1,0 +1,107 @@
+{
+  "format": "maca-drawing",
+  "version": "1.0",
+  "canvas": {
+    "width": 1200,
+    "height": 800,
+    "gridSize": 10
+  },
+  "objects": [
+    {
+      "id": "rectangle-1",
+      "type": "rectangle",
+      "x": 590,
+      "y": 210,
+      "width": 120,
+      "height": 60,
+      "rotation": 0,
+      "zIndex": 1,
+      "style": {
+        "fill": "#ffffff",
+        "stroke": "#000000",
+        "strokeWidth": 1
+      },
+      "text": ""
+    },
+    {
+      "id": "rectangle-2",
+      "type": "rectangle",
+      "x": 300,
+      "y": 120,
+      "width": 120,
+      "height": 60,
+      "rotation": 0,
+      "zIndex": 1,
+      "style": {
+        "fill": "#ffffff",
+        "stroke": "#000000",
+        "strokeWidth": 1
+      },
+      "text": ""
+    },
+    {
+      "id": "connector-1",
+      "type": "connector",
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "rotation": 0,
+      "zIndex": 2,
+      "from": {
+        "objectId": "rectangle-2"
+      },
+      "to": {
+        "objectId": "rectangle-1",
+        "anchor": {
+          "x": 0.9083333333333333,
+          "y": 0
+        }
+      },
+      "curve": true,
+      "elbow": false,
+      "style": {
+        "stroke": "#000000",
+        "strokeWidth": 1
+      },
+      "startMarkerSize": "medium",
+      "endMarkerSize": "large",
+      "curveOffset": {
+        "x": 97.5,
+        "y": -15
+      }
+    },
+    {
+      "id": "arrow-1",
+      "type": "arrow",
+      "x": 840,
+      "y": 150,
+      "width": 10,
+      "height": 10,
+      "rotation": 0,
+      "zIndex": 3,
+      "x2": 940,
+      "y2": 250,
+      "style": {
+        "stroke": "#000000",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "id": "line-1",
+      "type": "line",
+      "x": 860,
+      "y": 290,
+      "width": 10,
+      "height": 10,
+      "rotation": 0,
+      "zIndex": 4,
+      "x2": 960,
+      "y2": 390,
+      "style": {
+        "stroke": "#000000",
+        "strokeWidth": 1
+      }
+    }
+  ]
+}

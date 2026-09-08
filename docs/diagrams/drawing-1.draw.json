@@ -1,0 +1,10 @@
+{
+  "format": "maca-drawing",
+  "version": "1.0",
+  "canvas": {
+    "width": 1200,
+    "height": 800,
+    "gridSize": 10
+  },
+  "objects": []
+}

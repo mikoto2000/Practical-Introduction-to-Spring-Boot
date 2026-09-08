@@ -1,0 +1,75 @@
+{
+  "format": "maca-drawing",
+  "version": "1.0",
+  "canvas": {
+    "width": 1200,
+    "height": 800,
+    "gridSize": 10
+  },
+  "objects": [
+    {
+      "id": "rectangle-1",
+      "type": "rectangle",
+      "x": 510,
+      "y": 190,
+      "width": 120,
+      "height": 60,
+      "rotation": 0,
+      "zIndex": 1,
+      "style": {
+        "fill": "#ffffff",
+        "stroke": "#000000",
+        "strokeWidth": 1
+      },
+      "text": ""
+    },
+    {
+      "id": "rectangle-2",
+      "type": "rectangle",
+      "x": 160,
+      "y": 90,
+      "width": 120,
+      "height": 60,
+      "rotation": 0,
+      "zIndex": 1,
+      "style": {
+        "fill": "#ffffff",
+        "stroke": "#000000",
+        "strokeWidth": 1
+      },
+      "text": ""
+    },
+    {
+      "id": "connector-1",
+      "type": "connector",
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "rotation": 0,
+      "zIndex": 2,
+      "from": {
+        "objectId": "rectangle-2"
+      },
+      "to": {
+        "objectId": "rectangle-1",
+        "anchor": {
+          "x": 0.6166666666666667,
+          "y": 0
+        }
+      },
+      "curve": true,
+      "elbow": false,
+      "style": {
+        "stroke": "#000000",
+        "strokeWidth": 1
+      },
+      "startMarkerSize": "medium",
+      "endMarkerSize": "large",
+      "curveOffset": {
+        "x": 63,
+        "y": -22.5
+      }
+    }
+  ]
+}
