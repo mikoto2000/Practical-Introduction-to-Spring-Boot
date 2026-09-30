@@ -1,18 +1,26 @@
 ---
-title: Spring Boot Security ハンズオン 第二回
+title: Spring Boot Security 入門 第2回 - ログイン・ログアウトのカスタマイズと DB 認証
 ---
 
-# Spring Boot Security 入門 第二回 - ログイン・ログアウトのカスタマイズとDB認証
+# Spring Boot Security 入門 第2回 - ログイン・ログアウトのカスタマイズと DB 認証
 
 ## 概要
 
-Java / Spring Boot の Spring Security の基本を学ぶ勉強会の第二回です。ログイン・ログアウトのカスタマイズ、DB からのユーザー情報取得、ユーザー登録、ロールを用いたアクセス制御（RBAC の触り）を扱います。
+Java / Spring Boot の Spring Security の基本を学ぶ勉強会の第2回です。ログイン・ログアウトのカスタマイズ、DB からのユーザー情報取得、ユーザー登録、ロールを用いたアクセス制御（RBAC の触り）を扱います。
 
 ## 対象読者
 
 - Java / Spring Boot でアプリケーションを開発しているが、Spring Security を「なんとなく」使っている方
 - ログインページやログアウトを自作したい方
 - ユーザー情報を DB から取得する構成を学びたい方
+
+## 前提知識と到達目標
+
+[第1回](./Vol1.md) を完了した同じプロジェクトを使います。
+`UserDetailsServiceImpl`、`SecurityConfig`、`index.html`、`private.html` があることを確認してください。
+SQL の SELECT / INSERT、HTML フォーム、DI の基本を前提にします。
+今回は、自作フォームでログイン・ログアウトし、DB のユーザーと ADMIN / USER の権限差を確認することを目指します。
+変更後はアプリを再起動し、各段階の確認をしてから次へ進みましょう。
 
 ## この資料の構成
 
@@ -133,7 +141,7 @@ public class LoginController {
 
 ログイン画面を用意します。
 
-今回は、ユーザー名とパスワードを入れるテキストエリアとログインボタンがあるだけのシンプルなページにします。
+今回は、ユーザー名とパスワードを入れる入力欄とログインボタンがあるだけのシンプルなページにします。
 
 `src/main/resources/templates/login.html`:
 
@@ -161,6 +169,9 @@ public class LoginController {
   </body>
 </html>
 ```
+
+`GET /login` は Controller が画面を表示し、`POST /login` は Spring Security が認証を処理します。
+ログイン処理用の `@PostMapping` を自分で追加する必要はありません。
 
 ### ログアウトの仕組みを修正
 
@@ -221,6 +232,13 @@ CSRF 対策のため、 Thymeleaf の機能を用いて `form` を構築しま�
 (今回は、 Spring Security に「ユーザー名とパスワード」を渡すところまでをカスタマイズしたということ)
 
 
+### 自作フォームの動作確認
+
+ログアウトした状態で `/private` にアクセスし、自作のログイン画面が表示されることを確認します。
+第1回と同じ `mikoto2000 / password` でログインし、ログアウトボタンでトップページへ戻ります。
+間違ったパスワードでは `/login?error` に移動し、エラーが表示されることも確認してください。
+POST が 403 になる場合は、Thymeleaf が処理したフォームに CSRF トークンが含まれるかを確認します。
+
 ## DB からユーザー情報を取得するように修正
 
 さて、これまでは簡単のためにユーザー情報を HashMap で保持していましたが、ここで DB から取得するように修正しましょう。
@@ -240,6 +258,8 @@ CSRF 対策のため、 Thymeleaf の機能を用いて `form` を構築しま�
 CREATE 文は `src/main/resources/schema.sql`, データは `src/main/resources/data.sql` で確認できます。
 
 <!-- textlint-enable -->
+
+インメモリ DB のため、登録したユーザーはアプリ停止時に消え、再起動時に初期データへ戻ります。
 
 role カラムを用意していますが、本格的な RBAC（ロール設計・権限設計）までは扱いません。
 
@@ -342,7 +362,7 @@ public interface UsersMapper {
 }
 ```
 
-### userDetailsServiceImpl の修正
+### UserDetailsServiceImpl の修正
 
 これまでに作ったエンティティとマッパーを利用して、 DB からユーザー情報を取得するように修正します。
 
@@ -392,6 +412,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 `User.withUsername` で Spring Security に返却するユーザー情報を組み立てます。
 
 
+### DB 認証の動作確認
+
+アプリを再起動し、いったんログアウトしてから `mikoto2000 / password` でログインします。
+ログイン済みのセッションのままでは、変更したユーザー検索処理は実行されません。
+存在しないユーザー名でも認証が失敗することを確認してください。
+
+DB の `entity.User` は保存データを表し、Spring Security の `User` は認証情報を表します。
+`UserDetailsServiceImpl` では前者を後者に変換しています。同名クラスの import に注意してください。
+
 ## ユーザー登録
 
 それでは、 DB にユーザー情報を登録してみましょう。
@@ -404,7 +433,7 @@ HashMap や DB のデータ定義を見た方は気付いたはずですが、Sp
 
 SecurityConfig に、以下の修正を加えます。
 
-- `/signup` ページに誰でもアクセスできるようにする
+- `/signup` ページと登録処理を ADMIN ロールのユーザーだけに許可する
 - ユーザー作成時に使用する `PasswordEncoder` を Bean 定義する
 
 `src/main/java/dev/mikoto2000/security/configuration/SecurityConfig.java`:
@@ -530,7 +559,8 @@ public interface UsersMapper {
 }
 ```
 
-ここは一般的な MyBatis の insert ですね。
+`@Insert` の SQL は、引数 `User` の各プロパティを値として使います。
+登録処理では、ユーザー名・ハッシュ化したパスワード・有効フラグ・ロールの 4 項目を渡します。
 
 
 ### コントローラーの追加
@@ -594,7 +624,7 @@ public class SignupController {
 }
 ```
 
-GET リクエストでサインアップページを表示し、そこから POST リクエストを受け取ることでユーザー登録します。
+GET リクエストでサインアップページを表示し、そこから POST リクエストを受け取ることでユーザー登録する。
 
 ユーザー登録では、 DI した `PasswordEncoder` を利用しパスワードをハッシュ化することで、
 Spring Security が読み込めるハッシュ形式のパスワードを生成します。
@@ -639,7 +669,9 @@ Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6
 
 #### ログイン画面
 
-ログイン画面にも、 `ADMIN` ロールを持つユーザーにのみ見えるサインアップ画面へのリンクを追加します。
+ログイン画面にもトップページへのリンクを追加します。
+以下のユーザー登録リンクは、既に ADMIN としてログインしている場合だけ表示されます。
+未ログイン時のユーザー登録の入口は用意しません。
 
 `src/main/resources/templates/login.html`:
 
@@ -675,7 +707,7 @@ Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6
 
 #### サインアップ画面
 
-ログインページ同様、ユーザー名とパスワードを入力する画面を追加します。
+`src/main/resources/templates/signup.html` を作成し、ユーザー名とパスワードを入力する画面を追加します。
 
 ```html
 <!DOCTYPE html>
@@ -706,7 +738,19 @@ Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6
 
 ### 動作確認
 
-ユーザー登録し、登録したユーザーでログインができることを確認しましょう。
+次の順に確認します。登録後のログイン画面への遷移だけでは、管理者のログイン状態は解除されません。
+
+1. `mikoto2000 / password` でログインし、トップページのユーザー登録リンクを開く。
+2. 未使用のユーザー名と演習用パスワードで登録する。新規ユーザーのロールは `USER` に固定されている。
+3. 管理者をログアウトさせ、登録したユーザーでログインする。この間はアプリを再起動しない。
+4. `/private` は表示でき、トップページの登録リンクは表示されないことを確認する。
+5. URL を直接入力して `/signup` にアクセスし、403 で拒否されることを確認する。
+
+リンクを隠すだけではアクセスを防げません。必ず URL の認可設定とセットで確認してください。
+`/admin/**` のルールも定義しましたが、対応する画面は今回作りません。権限差は実装済みの `/signup` で確認します。
+
+この登録例は認証の仕組みに集中するため、入力検証や重複ユーザーの専用エラー処理を省略しています。
+実際の登録機能に進むときは、バリデーション入門の方法で検証し、登録処理を Service にまとめます。
 
 
 ## 座学で学ぶ Spring Security
@@ -723,7 +767,7 @@ Spring Security のデフォルトログインページは、動作確認には�
 
 #### ログイン失敗時のリダイレクト
 
-`failureUrl("/login?error")` は、認証に失敗したときに `/login?error` へリダイレクトする指定です。ハンズオンのログインページでは `th:if="${param.error}"` で `error` パラメータの有無を判定し、「ユーザー名かパスワードが違います」と表示しています。このように、失敗時の遷移先を指定することで、エラー表示を自作の画面で制御できます。
+`failureUrl("/login?error")` は、認証が失敗した場合、`/login?error` へリダイレクトする指定です。ハンズオンのログインページでは `th:if="${param.error}"` で `error` パラメータの有無を判定し、「ユーザー名かパスワードが違います」と表示しています。このように、失敗時の遷移先を指定することで、エラー表示を自作の画面で制御できます。
 
 #### ログイン処理はデフォルトのまま
 
@@ -758,9 +802,9 @@ Spring Security のデフォルトログインページは、動作確認には�
 ↓
 UserDetailsService がユーザー名からユーザー情報を取得（ここで DB 検索）
 ↓
-取得したパスワードと入力されたパスワードを照合
+PasswordEncoder が保存済みハッシュと入力されたパスワードを照合
 ↓
-一致すれば認証成功、認可の判断へ進む
+パスワードが適合し、アカウントが有効なら認証成功
 ```
 
 ハンズオンでは、`UsersMapper.findByUsername(username)` で DB からユーザー情報を取得し、`User.withUsername` で Spring Security に返すユーザー情報を組み立てました。第1回の HashMap 実装と比べると、取得元が DB に変わっただけで、`UserDetailsService` の役割は同じです。
@@ -781,7 +825,8 @@ UserDetailsService がユーザー名からユーザー情報を取得（ここ�
 
 #### ユーザー登録時のハッシュ化
 
-ユーザー登録では、`passwordEncoder.encode(password)` で入力されたパスワードをハッシュ化してから DB に保存しました。このとき、`PasswordEncoderFactories.createDelegatingPasswordEncoder()` が生成する `DelegatingPasswordEncoder` を使うと、`{bcrypt}` プレフィックス付きの形式でハッシュ化されます。これにより、保存したハッシュを Spring Security がそのまま認証に使えます。
+ユーザー登録では、`passwordEncoder.encode(password)` で入力されたパスワードをハッシュ化してから DB に保存しました。`PasswordEncoderFactories.createDelegatingPasswordEncoder()` でエンコーダーを生成します。
+これを使うと、ハッシュには `{bcrypt}` プレフィックスが付与されます。これにより、保存したハッシュを Spring Security がそのまま認証に使えます。
 
 ### ロールと認可（RBAC の触り）
 
@@ -798,6 +843,9 @@ UserDetailsService がユーザー名からユーザー情報を取得（ここ�
 .requestMatchers("/admin/**").hasRole("ADMIN")
 ```
 
+`roles("ADMIN")` は内部では `ROLE_ADMIN` という権限を作ります。
+そのため DB の role には `ADMIN` を保存し、`hasRole` にも `ADMIN` を渡します。
+
 `hasRole("ADMIN")` は「`ADMIN` ロールを持つユーザーだけアクセスを許可する」という指定です。これにより、ユーザー登録ページは管理者だけが見られるようになります。
 
 #### View レベルでの制御（sec:authorize）
@@ -806,7 +854,7 @@ URL レベルだけでなく、View レベルでもロールによる表示制�
 
 #### RBAC の触りと本格的なロール設計
 
-ハンズオンでは、ロール情報をログインユーザーに持たせ、URL / View レベルで制御できることを確認しました。これが RBAC（ロールベースのアクセス制御）の触りです。本格的な RBAC では、ロールと権限（Authority）の設計、メソッドレベルの認可など、より細かい制御を扱います。これらは次回以降の話題です。
+ハンズオンでは、ロール情報をログインユーザーに持たせ、URL / View レベルで制御できることを確認しました。これが RBAC（ロールベースのアクセス制御）の触りです。本格的な RBAC では、ロールと権限（Authority）の設計、メソッドレベルの認可など、より細かい制御を扱います。これらは本教材の範囲外です。発展学習として公式資料で確認してください。
 
 ## まとめ
 
