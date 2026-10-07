@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="505" viewBox="0 0 960 505" role="img" aria-labelledby="title desc">
+  <title id="title">年齢の同値分割</title>
+  <desc id="desc">整数の年齢を、不正な-1以下、妥当な0から120、不正な121以上に分け、それぞれ-1、30、121を代表値として選ぶ。数値でない入力は変換する入口、nullは受け取れる型や入口で別途確認する。</desc>
+  <rect width="960" height="505" rx="16" fill="#ffffff"/>
+  <g font-family="'Noto Sans JP', 'Noto Sans CJK JP', 'Yu Gothic', sans-serif">
+<text x="40" y="48" font-size="28" text-anchor="start" font-weight="bold" fill="#172b3a">同値分割：グループごとに代表値を選ぶ</text>
+<text x="40" y="85" font-size="21" text-anchor="start" font-weight="normal" fill="#172b3a">仕様：整数の年齢が 0～120 なら妥当（両端を含む）</text>
+<rect x="40" y="115" width="270" height="175" rx="12" fill="#fff1e8" stroke="#c2ccd3" stroke-width="2"/>
+<text x="175" y="151" font-size="20" text-anchor="middle" font-weight="bold" fill="#172b3a">不正：下限より小さい</text>
+<text x="175" y="202" font-size="30" text-anchor="middle" font-weight="bold" fill="#172b3a">-1 以下</text>
+<text x="175" y="260" font-size="24" text-anchor="middle" font-weight="normal" fill="#172b3a">代表値：-1</text>
+<rect x="345" y="115" width="270" height="175" rx="12" fill="#e7f4f4" stroke="#c2ccd3" stroke-width="2"/>
+<text x="480" y="151" font-size="20" text-anchor="middle" font-weight="bold" fill="#172b3a">妥当</text>
+<text x="480" y="202" font-size="30" text-anchor="middle" font-weight="bold" fill="#172b3a">0～120</text>
+<text x="480" y="260" font-size="24" text-anchor="middle" font-weight="normal" fill="#172b3a">代表値：30</text>
+<rect x="650" y="115" width="270" height="175" rx="12" fill="#fff1e8" stroke="#c2ccd3" stroke-width="2"/>
+<text x="785" y="151" font-size="20" text-anchor="middle" font-weight="bold" fill="#172b3a">不正：上限より大きい</text>
+<text x="785" y="202" font-size="30" text-anchor="middle" font-weight="bold" fill="#172b3a">121 以上</text>
+<text x="785" y="260" font-size="24" text-anchor="middle" font-weight="normal" fill="#172b3a">代表値：121</text>
+<text x="480" y="326" font-size="22" text-anchor="middle" font-weight="normal" fill="#172b3a">同じグループでは、同じ扱いになると期待する</text>
+<rect x="40" y="353" width="880" height="125" rx="12" fill="#f3f5f7" stroke="#c2ccd3" stroke-width="2"/>
+<text x="60" y="385" font-size="21" text-anchor="start" font-weight="bold" fill="#172b3a">値の範囲とは別に確認する入力</text>
+<text x="60" y="422" font-size="20" text-anchor="start" font-weight="normal" fill="#172b3a">数値でない入力：文字列を数値に変換する入口で確認</text>
+<text x="60" y="456" font-size="20" text-anchor="start" font-weight="normal" fill="#172b3a">null：受け取れる型・入口で、必須なら不正として確認</text>
+  </g>
+</svg>
