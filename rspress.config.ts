@@ -37,6 +37,8 @@ export default defineConfig({
         { text: 'バリデーション入門', link: '/SpringBoot入門/バリデーション入門' },
         { text: 'ロギング入門', link: '/SpringBoot入門/ロギング入門' },
         { text: 'DB マイグレーション入門', link: '/SpringBoot入門/DBマイグレーション入門' },
+        { text: 'DB アクセス・トランザクション入門', link: '/SpringBoot入門/DBアクセス・トランザクション入門' },
+        { text: '例外処理・エラー応答入門', link: '/SpringBoot入門/例外処理・エラー応答入門' },
       ],
       '/SpringBootテスト入門': [
         { text: 'テスト入門', link: '/SpringBootテスト入門/テスト入門' },
