@@ -55,23 +55,43 @@ PowerShell では `curl.exe` を使うと、同名の別コマンドとの混同
 
 本文の Spring Boot バージョンは教材作成時の指定です。「最新安定版」という意味ではありません。
 Spring Initializr で指定版を選べない場合、同じ 4.0 系の利用可能な安定版を選び、生成された依存関係を確認してください。
-Security の配布プロジェクトは、その `pom.xml` を基準に進めます。
+Security の配布 ZIP は Java 25 指定なので、第1回の手順で `pom.xml` を Java 21 に変更してから起動します。
+
+## 勉強会の単位と事前準備
+
+次の時間は、初回説明と動作確認を含む目安です。受講者の経験に合わせて分割してください。
+開始前に JDK 21・Maven の起動と依存の取得を済ませ、各章の新規プロジェクトを用意します。
+Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメージ取得も事前に確認します。
+各章の「講義の区切り」で基本の終了条件を確認し、発展内容は復習や次回へ回せます。
+
+| 章 | 基本の終了条件 | 目安（分） | 発展・次回 |
+|---|---|---:|---|
+| [プロジェクト作成・デプロイ入門](./SpringBoot入門/プロジェクト作成・デプロイ入門.md) | API 起動・設定変更・jar 実行 | 60 | デプロイ環境の比較 |
+| [バリデーション入門](./SpringBoot入門/バリデーション入門.md) | 不正入力を400で拒否 | 90 | 独自制約 |
+| [テスト入門](./SpringBootテスト入門/テスト入門.md) | Util と Service のテストを実行 | 90 | Repository・Controller を次の60分で実施 |
+| [開発者テスト入門_テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md) | 同値分割と境界値でケースを選ぶ | 60 | 状態遷移・Pairwise |
+| [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md) | DTO の境界値と Web の400を検証 | 90 | Advice の独立テスト |
+| [ロギング入門](./SpringBoot入門/ロギング入門.md) | アクセスログ・MDC・業務ログを確認 | 90 | AOP・構造化ログ |
+| [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md) | 2本のマイグレーションと履歴を確認 | 60 | 並行開発・outOfOrder |
+| [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md) | CRUD と登録失敗時のロールバックを確認 | 120 | プロキシ境界・削除失敗 |
+| [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md) | 404・409・400・500の契約を確認 | 90 | その他 MVC 例外・MockMvc の契約テスト |
+| [Vol1](./SpringSecurity入門/Vol1.md) | ログイン・ログアウトとページの保護 | 90 | 認証の内部構成 |
+| [Vol2](./SpringSecurity入門/Vol2.md) | DB認証と管理者だけの登録を確認 | 120 | 本番運用と入力検証 |
+| [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md) | 許可・拒否・CSRFの違いを確認 | 90 | ログイン・ログアウトの追加テスト |
+| [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md) | H2で保存と登録・削除失敗を検証 | 90 | PostgreSQL を次の60分で実施 |
 
 ## コンテンツ一覧
 
-1. [はじめに](introduction.md)
-1. [Spring Boot プロジェクト作成・デプロイ入門](./SpringBoot入門/プロジェクト作成・デプロイ入門.md)
-1. [Spring Boot バリデーション入門](./SpringBoot入門/バリデーション入門.md)
-1. Spring Boot テスト入門
-    1. [Spring Boot テスト入門](./SpringBootテスト入門/テスト入門.md)
-    1. [開発者テスト入門 - テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md)
-    1. [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md)
-    1. [Spring Security テスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
-    1. [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
-1. [Spring Boot ロギング入門](./SpringBoot入門/ロギング入門.md)
-1. [DB マイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md)
-1. [DB アクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md)
-1. [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md)
-1. Spring Boot セキュリティ入門
-    1. [Spring Boot Security ハンズオン 第1回](./SpringSecurity入門/Vol1.md)
-    1. [Spring Boot Security ハンズオン 第2回](./SpringSecurity入門/Vol2.md)
+1. [プロジェクト作成・デプロイ入門](./SpringBoot入門/プロジェクト作成・デプロイ入門.md)
+2. [バリデーション入門](./SpringBoot入門/バリデーション入門.md)
+3. [テスト入門](./SpringBootテスト入門/テスト入門.md)
+4. [開発者テスト入門_テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md)
+5. [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md)
+6. [ロギング入門](./SpringBoot入門/ロギング入門.md)
+7. [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md)
+8. [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md)
+9. [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md)
+10. [Vol1](./SpringSecurity入門/Vol1.md)
+11. [Vol2](./SpringSecurity入門/Vol2.md)
+12. [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
+13. [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)

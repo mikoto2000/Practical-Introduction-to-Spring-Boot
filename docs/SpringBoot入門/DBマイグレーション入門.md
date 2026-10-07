@@ -4,6 +4,12 @@ title: Spring Boot と Flyway で実現する DB マイグレーション - DB �
 
 # Spring Boot と Flyway で実現する DB マイグレーション - DB を壊さず開発から運用まで行う方法
 
+## 講義の区切り
+
+基本編の目安は 60 分です。終了条件は「2本のマイグレーションと履歴を確認」です。
+発展内容・次回の目安: 並行開発・outOfOrder。基本の確認後に取り組んでください。
+準備と前後の章は [学習ガイド](../introduction.md) で確認できます。
+
 ## 対象者と到達目標
 
 Spring Boot アプリを起動でき、SQL の CREATE TABLE / ALTER TABLE を読める方が対象です。
@@ -127,7 +133,7 @@ DDL はテーブルなどの構造を定義する SQL のことです。
 
 起動ログに、次のようにマイグレーションの結果が表示されます。
 
-```
+```text
 2026-02-04T10:45:41.784Z  INFO 170450 --- [flyway] [  restartedMain] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
 2026-02-04T10:45:41.786Z  INFO 170450 --- [flyway] [  restartedMain] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.006s)
 2026-02-04T10:45:41.789Z  INFO 170450 --- [flyway] [  restartedMain] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "PUBLIC"."flyway_schema_history" ...
@@ -198,7 +204,7 @@ ORDER BY "installed_rank";
 「実装中は draft ディレクトリにマイグレーションファイルを作り、
 レビュー後、 migration ディレクトリに移動させてマージする」
 
-```
+```text
 feature branch を作成
 ↓
 draft ディレクトリ内で SQL を書く
@@ -227,6 +233,26 @@ DB をリセットするのは使い捨ての開発環境に限り、共有環�
 
 このあたりの運用は、自分のプロジェクトの特性に合わせ、自分で考えフィットさせていくようにしましょう。
 
+
+### 複数人でバージョンを採番するとき
+
+本編で `V20260203.01` と `V20260203.02` を適用した、使い捨てのローカル DB をそのまま使います。適用済み SQL は変更しません。アプリを停止し、次のファイルを追加してください。
+
+`src/main/resources/db/migration/V20260203.01.1__add_account_note.sql`:
+
+```sql
+ALTER TABLE ACCOUNT ADD COLUMN note VARCHAR(100);
+```
+
+Flyway は版番号を数値の区切りとして比較するので、`20260203.01 < 20260203.01.1 < 20260203.02` となります。
+
+既定の `outOfOrder=false` のまま再起動してください。追加版が ignored となり、起動時に「解決済みだが未適用のマイグレーション」を示す検証エラーになることを確認します。note 列はまだ追加されません。確認後は未適用の追加ファイルを削除し、再起動して元の2本だけの状態へ戻します。共有 DB のリセットや適用済みファイルの削除は行いません。
+
+未配布の変更は、マージ時に共有環境の最新バージョンより大きい番号へ採番します。
+適用済みのファイルは変更せず、新しい番号の修正マイグレーションを追加します。
+`outOfOrder=true` を使う場合は、適用順が異なる環境でも同じスキーマになるかを検証します。
+履歴を合わせるためだけに `repair` を実行しても、スキーマは修正されません。
+[Flyway の outOfOrder 設定](https://documentation.red-gate.com/fd/flyway-out-of-order-setting-277579015.html) を参照してください。
 
 ## まとめ
 

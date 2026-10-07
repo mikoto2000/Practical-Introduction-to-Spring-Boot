@@ -1,5 +1,5 @@
-import * as path from 'node:path';
-import { defineConfig } from 'rspress/config';
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from '@rspress/core';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginRstDirectives } from 'rspress-plugin-rst-directives';
@@ -8,19 +8,15 @@ import { pluginPlantUml } from 'rspress-plugin-plantuml';
 export default defineConfig({
   plugins: [
     pluginSitemap({
-      siteUrl: 'https://github.com/mikoto2000/Practical-Introduction-to-Spring-Boot/',
+      siteUrl: 'https://mikoto2000.github.io/Practical-Introduction-to-Spring-Boot/',
     }),
     pluginRstDirectives(),
     pluginPlantUml(),
   ],
-  root: path.join(__dirname, 'docs'),
+  root: fileURLToPath(new URL('./docs', import.meta.url)),
   base: '/Practical-Introduction-to-Spring-Boot/',
   title: 'Spring Boot 実践入門',
   icon: '/spring.svg',
-  logo: {
-    light: '/rspress-light-logo.png',
-    dark: '/rspress-dark-logo.png',
-  },
   logo: '/spring-2.svg',
   logoText: 'Spring Boot 実践入門',
   themeConfig: {
@@ -32,24 +28,21 @@ export default defineConfig({
       },
     ],
     sidebar: {
-      '/SpringBoot入門': [
+      '/': [
+        { text: 'はじめに', link: '/introduction' },
         { text: 'プロジェクト作成・デプロイ入門', link: '/SpringBoot入門/プロジェクト作成・デプロイ入門' },
         { text: 'バリデーション入門', link: '/SpringBoot入門/バリデーション入門' },
+        { text: 'テスト入門', link: '/SpringBootテスト入門/テスト入門' },
+        { text: '開発者テスト入門 - テストとは？編', link: '/SpringBootテスト入門/開発者テスト入門_テストとは編' },
+        { text: 'バリデーションテスト', link: '/SpringBootテスト入門/バリデーションテスト' },
         { text: 'ロギング入門', link: '/SpringBoot入門/ロギング入門' },
         { text: 'DB マイグレーション入門', link: '/SpringBoot入門/DBマイグレーション入門' },
         { text: 'DB アクセス・トランザクション入門', link: '/SpringBoot入門/DBアクセス・トランザクション入門' },
         { text: '例外処理・エラー応答入門', link: '/SpringBoot入門/例外処理・エラー応答入門' },
-      ],
-      '/SpringBootテスト入門': [
-        { text: 'テスト入門', link: '/SpringBootテスト入門/テスト入門' },
-        { text: '開発者テスト入門 - テストとは？編', link: '/SpringBootテスト入門/開発者テスト入門_テストとは編' },
-        { text: 'バリデーションテスト', link: '/SpringBootテスト入門/バリデーションテスト' },
+        { text: 'Security 第1回', link: '/SpringSecurity入門/Vol1' },
+        { text: 'Security 第2回', link: '/SpringSecurity入門/Vol2' },
         { text: 'Spring Security テスト入門', link: '/SpringBootテスト入門/SpringSecurityテスト入門' },
         { text: 'DB を含む統合テスト入門', link: '/SpringBootテスト入門/DBを含む統合テスト入門' },
-      ],
-      '/SpringSecurity入門': [
-        { text: 'Vol1', link: '/SpringSecurity入門/Vol1' },
-        { text: 'Vol2', link: '/SpringSecurity入門/Vol2' },
       ],
     },
   },

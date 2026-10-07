@@ -4,6 +4,12 @@ title: Spring Boot Security 入門 第2回 - ログイン・ログアウトの�
 
 # Spring Boot Security 入門 第2回 - ログイン・ログアウトのカスタマイズと DB 認証
 
+## 講義の区切り
+
+基本編の目安は 120 分です。終了条件は「DB認証と管理者だけの登録を確認」です。
+発展内容・次回の目安: 本番運用と入力検証。基本の確認後に取り組んでください。
+準備と前後の章は [学習ガイド](../introduction.md) で確認できます。
+
 ## 概要
 
 Java / Spring Boot の Spring Security の基本を学ぶ勉強会の第2回です。ログイン・ログアウトのカスタマイズ、DB からのユーザー情報取得、ユーザー登録、ロールを用いたアクセス制御（RBAC の触り）を扱います。
@@ -17,6 +23,8 @@ Java / Spring Boot の Spring Security の基本を学ぶ勉強会の第2回で�
 ## 前提知識と到達目標
 
 [第1回](./Vol1.md) を完了した同じプロジェクトを使います。
+第1回で `pom.xml` の `java.version` を 21 に変更したプロジェクトを使います。
+
 `UserDetailsServiceImpl`、`SecurityConfig`、`index.html`、`private.html` があることを確認してください。
 SQL の SELECT / INSERT、HTML フォーム、DI の基本を前提にします。
 今回は、自作フォームでログイン・ログアウトし、DB のユーザーと ADMIN / USER の権限差を確認することを目指します。
@@ -59,11 +67,11 @@ SQL の SELECT / INSERT、HTML フォーム、DI の基本を前提にします�
 - ユーザー登録
 
 
-## ログイン・ログアウトのカスタマイズ
+### ログイン・ログアウトのカスタマイズ
 
 これまでは Spring Security デフォルトのログイン・ログアウト画面を利用していましたが、今回はこれをカスタマイズしましょう。
 
-### SecurityConfig の修正
+#### SecurityConfig の修正
 
 まずは、 SecurityConfig の `formLogin` と `logout` を修正します。
 
@@ -111,7 +119,7 @@ public class SecurityConfig {
 }
 ```
 
-### ログインページ用のコントローラーを作成
+#### ログインページ用のコントローラーを作成
 
 今回はログインページを自作するので、ログインページ用のコントローラーも作成します。
 
@@ -137,7 +145,7 @@ public class LoginController {
 }
 ```
 
-### ログイン画面の作成
+#### ログイン画面の作成
 
 ログイン画面を用意します。
 
@@ -173,7 +181,7 @@ public class LoginController {
 `GET /login` は Controller が画面を表示し、`POST /login` は Spring Security が認証を処理します。
 ログイン処理用の `@PostMapping` を自分で追加する必要はありません。
 
-### ログアウトの仕組みを修正
+#### ログアウトの仕組みを修正
 
 今回は、ログアウト確認画面を表示せず、ログアウトボタンを押下したらすぐにログアウトするようにします。
 
@@ -232,25 +240,25 @@ CSRF 対策のため、 Thymeleaf の機能を用いて `form` を構築しま�
 (今回は、 Spring Security に「ユーザー名とパスワード」を渡すところまでをカスタマイズしたということ)
 
 
-### 自作フォームの動作確認
+#### 自作フォームの動作確認
 
 ログアウトした状態で `/private` にアクセスし、自作のログイン画面が表示されることを確認します。
 第1回と同じ `mikoto2000 / password` でログインし、ログアウトボタンでトップページへ戻ります。
 間違ったパスワードでは `/login?error` に移動し、エラーが表示されることも確認してください。
 POST が 403 になる場合は、Thymeleaf が処理したフォームに CSRF トークンが含まれるかを確認します。
 
-## DB からユーザー情報を取得するように修正
+### DB からユーザー情報を取得するように修正
 
 さて、これまでは簡単のためにユーザー情報を HashMap で保持していましたが、ここで DB から取得するように修正しましょう。
 
 今回は、インメモリの H2 DB と MyBatis の組み合わせを使います。
 
-### DB・テーブル定義について
+#### DB・テーブル定義について
 
 本プロジェクトには、既に H2 データベースの起動・接続・初期化の設定がされています。
 これらについてはハンズオンの本題とはずれるので、テーブル定義の説明のみを行います。
 
-#### テーブル定義
+##### テーブル定義
 
 <!-- textlint-disable -->
 
@@ -300,7 +308,7 @@ VALUES
 );
 ```
 
-### エンティティの作成
+#### エンティティの作成
 
 テーブルから取得した値を格納するためのクラスを作成します。
 
@@ -325,7 +333,7 @@ public class User {
 }
 ```
 
-### マッパーの作成
+#### マッパーの作成
 
 テーブルから情報を取得する Mapper インターフェースを作成します。
 
@@ -362,7 +370,7 @@ public interface UsersMapper {
 }
 ```
 
-### UserDetailsServiceImpl の修正
+#### UserDetailsServiceImpl の修正
 
 これまでに作ったエンティティとマッパーを利用して、 DB からユーザー情報を取得するように修正します。
 
@@ -412,7 +420,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 `User.withUsername` で Spring Security に返却するユーザー情報を組み立てます。
 
 
-### DB 認証の動作確認
+#### DB 認証の動作確認
 
 アプリを再起動し、いったんログアウトしてから `mikoto2000 / password` でログインします。
 ログイン済みのセッションのままでは、変更したユーザー検索処理は実行されません。
@@ -421,7 +429,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 DB の `entity.User` は保存データを表し、Spring Security の `User` は認証情報を表します。
 `UserDetailsServiceImpl` では前者を後者に変換しています。同名クラスの import に注意してください。
 
-## ユーザー登録
+### ユーザー登録
 
 それでは、 DB にユーザー情報を登録してみましょう。
 
@@ -429,7 +437,7 @@ HashMap や DB のデータ定義を見た方は気付いたはずですが、Sp
 
 ここではユーザー情報を作成し、パスワードをハッシュ化したうえで USERS テーブルに入れるようにコードを修正していきます。
 
-### Spring Security 設定の変更・追加
+#### Spring Security 設定の変更・追加
 
 SecurityConfig に、以下の修正を加えます。
 
@@ -437,6 +445,11 @@ SecurityConfig に、以下の修正を加えます。
 - ユーザー作成時に使用する `PasswordEncoder` を Bean 定義する
 
 `src/main/java/dev/mikoto2000/security/configuration/SecurityConfig.java`:
+
+`/signup` の ADMIN 制限と `PasswordEncoder` Bean の2か所に注目します。
+
+<details>
+<summary>SecurityConfig の完成コード</summary>
 
 ```java
 package dev.mikoto2000.security.configuration;
@@ -495,6 +508,8 @@ public class SecurityConfig {
 }
 ```
 
+</details>
+
 `PasswordEncoder` を Bean 定義することで、 Spring Security がその `PasswordEncoder` を使用します。
 さらに、アプリケーションで DI することで、 Spring Security が使用する `PasswordEncoder` と同じものをアプリケーションが使えるようになります。
 
@@ -502,7 +517,7 @@ public class SecurityConfig {
 初期管理者ユーザーは `data.sql` であらかじめ作成しています。
 
 
-### UsersMapper にインサート用メソッドを追加
+#### UsersMapper にインサート用メソッドを追加
 
 `insert` メソッドを追加し、テーブルにレコードを追加できるようにします。
 
@@ -563,11 +578,16 @@ public interface UsersMapper {
 登録処理では、ユーザー名・ハッシュ化したパスワード・有効フラグ・ロールの 4 項目を渡します。
 
 
-### コントローラーの追加
+#### コントローラーの追加
 
 `/signup` 用のコントローラーを定義します。
 
 `src/main/java/dev/mikoto2000/security/controller/SignupController.java`:
+
+フォームから受け取ったパスワードを `passwordEncoder.encode(password)` で変換してから保存します。
+
+<details>
+<summary>SignupController の完成コード</summary>
 
 ```java
 package dev.mikoto2000.security.controller;
@@ -624,16 +644,18 @@ public class SignupController {
 }
 ```
 
+</details>
+
 GET リクエストでサインアップページを表示し、そこから POST リクエストを受け取ることでユーザー登録する。
 
 ユーザー登録では、 DI した `PasswordEncoder` を利用しパスワードをハッシュ化することで、
 Spring Security が読み込めるハッシュ形式のパスワードを生成します。
 
-### View の追加
+#### View の追加
 
 裏側の仕組みが整ったので、 View の作成に入っていきます。
 
-#### インデックス画面
+##### インデックス画面
 
 インデックス画面に、 `ADMIN` ロールを持つユーザーにのみ見えるサインアップ画面へのリンクを追加します。
 
@@ -667,7 +689,7 @@ Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6
 `sec:authorize` で「ロールごとに表示非表示を切り替える」を実現しています。
 
 
-#### ログイン画面
+##### ログイン画面
 
 ログイン画面にもトップページへのリンクを追加します。
 以下のユーザー登録リンクは、既に ADMIN としてログインしている場合だけ表示されます。
@@ -705,7 +727,7 @@ Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6
 </html>
 ```
 
-#### サインアップ画面
+##### サインアップ画面
 
 `src/main/resources/templates/signup.html` を作成し、ユーザー名とパスワードを入力する画面を追加します。
 
@@ -736,7 +758,7 @@ Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6
 </html>
 ```
 
-### 動作確認
+#### 動作確認
 
 次の順に確認します。登録後のログイン画面への遷移だけでは、管理者のログイン状態は解除されません。
 
@@ -855,6 +877,19 @@ URL レベルだけでなく、View レベルでもロールによる表示制�
 #### RBAC の触りと本格的なロール設計
 
 ハンズオンでは、ロール情報をログインユーザーに持たせ、URL / View レベルで制御できることを確認しました。これが RBAC（ロールベースのアクセス制御）の触りです。本格的な RBAC では、ロールと権限（Authority）の設計、メソッドレベルの認可など、より細かい制御を扱います。これらは本教材の範囲外です。発展学習として公式資料で確認してください。
+
+## 本番へ進む前の確認
+
+この教材の固定ユーザーと `password` は演習専用です。本番では初期ユーザーと固定パスワードを削除し、秘密情報を配布物へ含めません。
+
+- HTTPS を使い、セッション Cookie の Secure、HttpOnly、SameSite と有効期限を確認する。
+- ログイン試行の制限、失敗の監視、パスワード再設定と漏えい時の無効化を設計する。
+- 登録入力の長さ・形式、重複と権限を検証する。BCrypt の入力上限はバイト数で確認する。
+- パスワードは適切な PasswordEncoder で保存し、平文やハッシュをログへ出さない。
+- CSRF 保護を維持し、管理者だけが行える操作をサーバー側で検証する。
+
+ハッシュ化は保存時の対策です。通信、セッション、試行制限、アカウント回復の対策も必要です。
+[Spring Security のパスワード保存](https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html) を参照してください。
 
 ## まとめ
 
