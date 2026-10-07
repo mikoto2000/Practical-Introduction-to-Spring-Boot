@@ -4,6 +4,12 @@ title: DB を含む統合テスト入門
 
 # DB を含む統合テスト入門
 
+## 講義の区切り
+
+基本編の目安は 90 分です。終了条件は「H2で保存と登録・削除失敗を検証」です。
+発展内容・次回の目安: PostgreSQL を次の60分で実施。基本の確認後に取り組んでください。
+準備と前後の章は [学習ガイド](../introduction.md) で確認できます。
+
 ## 概要
 
 Controller、Service、Mapper、DB を接続した状態で、注文 API の結果を検証します。
@@ -129,6 +135,20 @@ public class OrderStorageExceptionHandler {
 以下のファイルを `src/test/java/dev/mikoto2000/springboot/database` に配置します。
 H2 と PostgreSQL で同じケースを実行するため、テストの本文を抽象クラスにまとめます。
 
+講義では OrderApiContract の責務と確認する結果に注目します。実装時には次の完成コードを開いて配置してください。
+
+注目するのは、失敗応答の後に実物の DB を照会する部分です。
+
+```java title="抜粋: 削除失敗後の確認"
+mvc.perform(delete("/orders/" + id))
+    .andExpect(status().isInternalServerError());
+assertEquals(1, orderCount());
+assertEquals(1, itemCount());
+```
+
+<details>
+<summary>OrderApiContract の完成コード</summary>
+
 ```java title="OrderApiContract.java"
 package dev.mikoto2000.springboot.database;
 
@@ -243,6 +263,26 @@ abstract class OrderApiContract {
   }
 
   @Test
+  void failedHeaderDeleteRestoresDeletedItems() throws Exception {
+    mvc.perform(post("/orders/with-item").contentType(MediaType.APPLICATION_JSON)
+        .content("{\"customerName\":\"Guarded\",\"productName\":\"Book\",\"quantity\":2}"))
+        .andExpect(status().isCreated());
+    long id = jdbc.queryForObject("SELECT id FROM purchase_order", Long.class);
+    // テスト専用の参照を用意し、明細削除の後に行うヘッダー削除だけを失敗させる。
+    jdbc.execute("CREATE TABLE order_delete_guard (order_id BIGINT PRIMARY KEY REFERENCES purchase_order(id))");
+    try {
+      jdbc.update("INSERT INTO order_delete_guard (order_id) VALUES (?)", id);
+      mvc.perform(delete("/orders/" + id))
+          .andExpect(status().isInternalServerError())
+          .andExpect(jsonPath("$.code").value("DB_WRITE_FAILED"));
+      assertEquals(1, orderCount());
+      assertEquals(1, itemCount());
+    } finally {
+      jdbc.execute("DROP TABLE order_delete_guard");
+    }
+  }
+
+  @Test
   void deleteRemovesOrderAndItem() throws Exception {
     var response = mvc.perform(post("/orders/with-item")
         .contentType(MediaType.APPLICATION_JSON)
@@ -260,6 +300,12 @@ abstract class OrderApiContract {
   }
 }
 ```
+
+</details>
+
+削除の原子性を確認するには、正常系に加えて途中失敗も検証します。追加した失敗ケースでは、テスト専用の外部キーで2番目の削除を失敗させます。
+先に削除した明細も元に戻ることを確認し、`delete` の `@Transactional` を外すと失敗するテストです。
+本番スキーマにはこのテーブルを追加しません。
 
 `@MockitoBean` は使いません。Service と Mapper も実物を読み込みます。
 HTTP の取得結果と、JdbcTemplate で確認した DB の値を組み合わせています。
@@ -286,7 +332,7 @@ class OrderApiH2Test extends OrderApiContract {}
 ```
 
 PowerShell では `.\mvnw.cmd '-Dtest=OrderApiH2Test' test` を使います。
-5 件のテストが成功することを確認してください。
+6 件のテストが成功することを確認してください。
 意図的な DB 制約違反のテストでは ERROR ログが出ますが、期待した応答と DB 状態ならテストは成功します。
 
 このテストを実行するとき、アプリを別のターミナルで起動する必要はありません。
@@ -361,7 +407,7 @@ Docker を起動して実行します。
 ./mvnw -Dtest=OrderApiPostgresTest test
 ```
 
-PostgreSQL のコンテナーが起動し、同じ 5 件のテストが成功することを確認します。
+PostgreSQL のコンテナーが起動し、同じ 6 件のテストが成功することを確認します。
 初回はイメージの取得があるため、H2 より時間がかかります。
 テスト中のログで `jdbc:postgresql:` を含む接続先を確認し、H2 に接続していないことも確認してください。
 

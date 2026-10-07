@@ -4,6 +4,12 @@ title: Spring Boot と Flyway で実現する DB マイグレーション - DB �
 
 # Spring Boot と Flyway で実現する DB マイグレーション - DB を壊さず開発から運用まで行う方法
 
+## 講義の区切り
+
+基本編の目安は 60 分です。終了条件は「V1・V2 の適用と履歴を確認」です。
+発展内容・次回の目安: 並行開発・outOfOrder。基本の確認後に取り組んでください。
+準備と前後の章は [学習ガイド](../introduction.md) で確認できます。
+
 ## 対象者と到達目標
 
 Spring Boot アプリを起動でき、SQL の CREATE TABLE / ALTER TABLE を読める方が対象です。
@@ -127,7 +133,7 @@ DDL はテーブルなどの構造を定義する SQL のことです。
 
 起動ログに、次のようにマイグレーションの結果が表示されます。
 
-```
+```text
 2026-02-04T10:45:41.784Z  INFO 170450 --- [flyway] [  restartedMain] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
 2026-02-04T10:45:41.786Z  INFO 170450 --- [flyway] [  restartedMain] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.006s)
 2026-02-04T10:45:41.789Z  INFO 170450 --- [flyway] [  restartedMain] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "PUBLIC"."flyway_schema_history" ...
@@ -198,7 +204,7 @@ ORDER BY "installed_rank";
 「実装中は draft ディレクトリにマイグレーションファイルを作り、
 レビュー後、 migration ディレクトリに移動させてマージする」
 
-```
+```text
 feature branch を作成
 ↓
 draft ディレクトリ内で SQL を書く
@@ -241,3 +247,15 @@ DB をリセットするのは使い捨ての開発環境に限り、共有環�
     - [Expand and Contract パターンによる破壊的変更の段階的適用](https://zenn.dev/babyjob/articles/4bfe61d366c6c0)
     - [スキーマの変更をデプロイする方法 - そこに仁義はあるのか(仮)](https://syobochim.hatenablog.com/entry/2020/05/20/084736)
     - [データベースを止めずにテーブル設計を変更したい](https://zenn.dev/praha/articles/abceef00258275)
+
+## 複数人でバージョンを採番するとき
+
+V2 を適用した DB へ後から V1.5 を追加しても、既定の `outOfOrder=false` では順序をさかのぼって実行しません。
+未適用の古い版は ignored となり、通常の検証ではエラーになります。
+例として、V1 → V2 の適用後に V1.5 を追加し、起動時の検証結果を確認してください。
+
+未配布の変更は、マージ時に共有環境の最新バージョンより大きい番号へ採番します。
+適用済みのファイルは変更せず、新しい番号の修正マイグレーションを追加します。
+`outOfOrder=true` を使う場合は、適用順が異なる環境でも同じスキーマになるかを検証します。
+履歴を合わせるためだけに `repair` を実行しても、スキーマは修正されません。
+[Flyway の outOfOrder 設定](https://documentation.red-gate.com/fd/flyway-out-of-order-setting-277579015.html) を参照してください。

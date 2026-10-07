@@ -4,6 +4,12 @@ title: Spring Boot Security 入門 第1回 - 認証・認可・ログアウト
 
 # Spring Boot Security 入門 第1回 - 認証・認可・ログアウト
 
+## 講義の区切り
+
+基本編の目安は 90 分です。終了条件は「ログイン・ログアウトとページの保護」です。
+発展内容・次回の目安: 認証の内部構成。基本の確認後に取り組んでください。
+準備と前後の章は [学習ガイド](../introduction.md) で確認できます。
+
 ## 概要
 
 Java / Spring Boot の Spring Security の基本を学ぶ勉強会です。認証（ログインできるか）と認可（アクセスできるか）の違い、ログインユーザー取得ロジックのカスタマイズ、認可の設定、ログアウトの実装を扱います。
@@ -64,6 +70,16 @@ Spring Security を理解するうえで、最初に押さえるべきは「認�
 [spring-boot-security-workshop-base.zip](https://github.com/mikoto2000/spring-boot-security-workshop/releases/download/v1.0.0/spring-boot-security-workshop-base.zip) をダウンロードし、展開してください。
 
 本ハンズオンでは、このベースプロジェクトを元に Spring Security のカスタマイズを行っていきます。
+配布 ZIP v1.0.0 の `pom.xml` は Java 25 を指定しています。この教材では Java 21 に揃えるため、起動前に次のプロパティへ変更してください。
+
+```xml title="pom.xml の properties 内（抜粋）"
+<java.version>21</java.version>
+```
+
+`./mvnw -v`（PowerShell では `.\mvnw.cmd -v`）で Java version が 21 であることを確認します。
+`./mvnw test` が成功してから起動してください。Java 25 のまま Java 21 で実行すると、release version 25 のエラーになります。
+第2回でも、この変更済みプロジェクトを使います。
+
 展開先の `pom.xml` があるディレクトリで `./mvnw spring-boot:run` を実行して起動します。
 Windows PowerShell では `.\mvnw.cmd spring-boot:run` を使います。
 以降、Java や設定ファイルを変更したら、Ctrl+C で停止して起動し直してください。
@@ -120,7 +136,7 @@ JSON を返す `@RestController` とは戻り値の扱いが異なります。
 
 Spring Security の設定をしていない場合、起動時に以下のようにログインパスワードが表示されます。
 
-```
+```text
 2026-01-26T09:53:39.057Z  WARN 6610 --- [security] [  restartedMain] .s.a.UserDetailsServiceAutoConfiguration : 
 
 Using generated security password: 5c89d5fc-d4ff-49b9-8bc0-62cb35f4f13d
@@ -438,7 +454,20 @@ Spring Security が提供するデフォルトでは、 `/logout` にアクセ�
 ログイン済みのブラウザでは匿名時の動作が確認できないため、確認の前にログアウトするかプライベートウィンドウを使います。
 
 
-### まとめ
+### 本番へ進む前の確認
+
+この教材の固定ユーザーと `password` は演習専用です。本番では初期ユーザーと固定パスワードを削除し、秘密情報を配布物へ含めません。
+
+- HTTPS を使い、セッション Cookie の Secure、HttpOnly、SameSite と有効期限を確認する。
+- ログイン試行の制限、失敗の監視、パスワード再設定と漏えい時の無効化を設計する。
+- 登録入力の長さ・形式、重複と権限を検証する。BCrypt の入力上限はバイト数で確認する。
+- パスワードは適切な PasswordEncoder で保存し、平文やハッシュをログへ出さない。
+- CSRF 保護を維持し、管理者だけが行える操作をサーバー側で検証する。
+
+ハッシュ化は保存時の対策です。通信、セッション、試行制限、アカウント回復の対策も必要です。
+[Spring Security のパスワード保存](https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html) を参照してください。
+
+## まとめ
 
 ここまでで、次の作業を進めてきました。
 
@@ -496,7 +525,7 @@ PasswordEncoder が保存済みハッシュと入力されたパスワードを�
 
 `UserDetailsService` は「ユーザー名から認証対象ユーザーを取得する処理」を切り出したインタフェースです。ハンズオンでは、このインタフェースを実装して「どこからユーザー情報を取得するか」を自分で決めました。
 
-```java
+```java title="擬似コード: UserDetailsService の責務（配置しない）"
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

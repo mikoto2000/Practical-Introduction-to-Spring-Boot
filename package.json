@@ -12,12 +12,12 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "rspress": "^1.40.2"
+    "@rspress/core": "2.0.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@eslint/js": "^9.19.0",
-    "@rspress/plugin-sitemap": "^2.0.1",
+    "@rspress/plugin-sitemap": "2.0.1",
     "@types/node": "^18.11.17",
     "eslint": "^9.19.0",
     "globals": "^15.14.0",
@@ -29,5 +29,9 @@
     "typescript-eslint": "^8.22.0",
     "rspress-plugin-plantuml": "^0.1.0",
     "rspress-plugin-rst-directives": "^0.2.0"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=24"
   }
 }

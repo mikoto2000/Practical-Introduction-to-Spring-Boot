@@ -5,8 +5,11 @@
 
 ## 事前準備
 
-Node.js と npm が使える環境で、リポジトリのルート（このファイルと同じ場所）を作業ディレクトリにします。
+Node.js 24 と npm が使える環境で、リポジトリのルート（このファイルと同じ場所）を作業ディレクトリにします。
 まず `node --version` と `npm --version` で、コマンドが実行できることを確認してください。
+
+サイトは `@rspress/core 2.0.1` を使います。`npm ci` 後に `npx --no-install rspress --version` で 2.0.1 と表示されることを確認してください。
+[Rspress 2 の移行ガイド](https://www.rspress.dev/guide/migration/rspress-1-x) に沿って依存と設定の import を統一しています。
 
 ## セットアップ
 

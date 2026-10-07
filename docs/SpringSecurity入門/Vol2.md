@@ -4,6 +4,12 @@ title: Spring Boot Security 入門 第2回 - ログイン・ログアウトの�
 
 # Spring Boot Security 入門 第2回 - ログイン・ログアウトのカスタマイズと DB 認証
 
+## 講義の区切り
+
+基本編の目安は 120 分です。終了条件は「DB認証と管理者だけの登録を確認」です。
+発展内容・次回の目安: 本番運用と入力検証。基本の確認後に取り組んでください。
+準備と前後の章は [学習ガイド](../introduction.md) で確認できます。
+
 ## 概要
 
 Java / Spring Boot の Spring Security の基本を学ぶ勉強会の第2回です。ログイン・ログアウトのカスタマイズ、DB からのユーザー情報取得、ユーザー登録、ロールを用いたアクセス制御（RBAC の触り）を扱います。
@@ -17,6 +23,8 @@ Java / Spring Boot の Spring Security の基本を学ぶ勉強会の第2回で�
 ## 前提知識と到達目標
 
 [第1回](./Vol1.md) を完了した同じプロジェクトを使います。
+第1回で `pom.xml` の `java.version` を 21 に変更したプロジェクトを使います。
+
 `UserDetailsServiceImpl`、`SecurityConfig`、`index.html`、`private.html` があることを確認してください。
 SQL の SELECT / INSERT、HTML フォーム、DI の基本を前提にします。
 今回は、自作フォームでログイン・ログアウトし、DB のユーザーと ADMIN / USER の権限差を確認することを目指します。
@@ -438,6 +446,11 @@ SecurityConfig に、以下の修正を加えます。
 
 `src/main/java/dev/mikoto2000/security/configuration/SecurityConfig.java`:
 
+テスト対象へ渡す入力、依存の戻り値、期待する結果の3点を確認します。
+
+<details>
+<summary>SecurityConfig の完成コード</summary>
+
 ```java
 package dev.mikoto2000.security.configuration;
 
@@ -494,6 +507,8 @@ public class SecurityConfig {
   /* 修正ここまで */
 }
 ```
+
+</details>
 
 `PasswordEncoder` を Bean 定義することで、 Spring Security がその `PasswordEncoder` を使用します。
 さらに、アプリケーションで DI することで、 Spring Security が使用する `PasswordEncoder` と同じものをアプリケーションが使えるようになります。
@@ -569,6 +584,11 @@ public interface UsersMapper {
 
 `src/main/java/dev/mikoto2000/security/controller/SignupController.java`:
 
+フォームから受け取ったパスワードを `passwordEncoder.encode(password)` で変換してから保存します。
+
+<details>
+<summary>SignupController の完成コード</summary>
+
 ```java
 package dev.mikoto2000.security.controller;
 
@@ -623,6 +643,8 @@ public class SignupController {
 
 }
 ```
+
+</details>
 
 GET リクエストでサインアップページを表示し、そこから POST リクエストを受け取ることでユーザー登録する。
 
@@ -855,6 +877,19 @@ URL レベルだけでなく、View レベルでもロールによる表示制�
 #### RBAC の触りと本格的なロール設計
 
 ハンズオンでは、ロール情報をログインユーザーに持たせ、URL / View レベルで制御できることを確認しました。これが RBAC（ロールベースのアクセス制御）の触りです。本格的な RBAC では、ロールと権限（Authority）の設計、メソッドレベルの認可など、より細かい制御を扱います。これらは本教材の範囲外です。発展学習として公式資料で確認してください。
+
+## 本番へ進む前の確認
+
+この教材の固定ユーザーと `password` は演習専用です。本番では初期ユーザーと固定パスワードを削除し、秘密情報を配布物へ含めません。
+
+- HTTPS を使い、セッション Cookie の Secure、HttpOnly、SameSite と有効期限を確認する。
+- ログイン試行の制限、失敗の監視、パスワード再設定と漏えい時の無効化を設計する。
+- 登録入力の長さ・形式、重複と権限を検証する。BCrypt の入力上限はバイト数で確認する。
+- パスワードは適切な PasswordEncoder で保存し、平文やハッシュをログへ出さない。
+- CSRF 保護を維持し、管理者だけが行える操作をサーバー側で検証する。
+
+ハッシュ化は保存時の対策です。通信、セッション、試行制限、アカウント回復の対策も必要です。
+[Spring Security のパスワード保存](https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html) を参照してください。
 
 ## まとめ
 
