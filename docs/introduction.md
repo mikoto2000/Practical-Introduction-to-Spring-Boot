@@ -70,9 +70,9 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 | [バリデーション入門](./SpringBoot入門/バリデーション入門.md) | 不正入力を400で拒否 | 90 | 独自制約 |
 | [テスト入門](./SpringBootテスト入門/テスト入門.md) | Util と Service のテストを実行 | 90 | Repository・Controller を次の60分で実施 |
 | [開発者テスト入門_テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md) | 同値分割と境界値でケースを選ぶ | 60 | 状態遷移・Pairwise |
-| [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md) | DTO の境界値と Web の400を検証 | 90 | Advice の独立テスト・ParameterizedTest |
+| [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md) | DTO の境界値と Web の400を検証 | 90 | Advice の独立テスト |
 | [ロギング入門](./SpringBoot入門/ロギング入門.md) | アクセスログ・MDC・業務ログを確認 | 90 | AOP・構造化ログ |
-| [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md) | V1・V2 の適用と履歴を確認 | 60 | 並行開発・outOfOrder |
+| [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md) | 2本のマイグレーションと履歴を確認 | 60 | 並行開発・outOfOrder |
 | [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md) | CRUD と登録失敗時のロールバックを確認 | 120 | プロキシ境界・削除失敗 |
 | [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md) | 404・409・400・500の契約を確認 | 90 | その他 MVC 例外・MockMvc の契約テスト |
 | [Vol1](./SpringSecurity入門/Vol1.md) | ログイン・ログアウトとページの保護 | 90 | 認証の内部構成 |

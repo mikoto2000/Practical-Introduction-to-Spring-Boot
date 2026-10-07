@@ -446,7 +446,7 @@ SecurityConfig に、以下の修正を加えます。
 
 `src/main/java/dev/mikoto2000/security/configuration/SecurityConfig.java`:
 
-テスト対象へ渡す入力、依存の戻り値、期待する結果の3点を確認します。
+`/signup` の ADMIN 制限と `PasswordEncoder` Bean の2か所に注目します。
 
 <details>
 <summary>SecurityConfig の完成コード</summary>

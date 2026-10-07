@@ -393,7 +393,7 @@ public class SecurityConfig {
 ```
 
 Spring Security が提供するデフォルトでは、 `/logout` にアクセスするとログアウト確認画面が表示されます。
-`Log Out` ボタンを押下するとログアウトし、 `/login` にリダイレクトされます。
+`Log Out` ボタンを押下するとログアウトし、 `/login?logout` にリダイレクトされます。`logout` パラメーターはログイン画面へログアウト完了を知らせます。
 (ログアウトは、 `/logout` への `POST` リクエストで実行される)
 
 前述の通り、ログアウトは `/logout` への `POST` リクエストで実行されるため、
