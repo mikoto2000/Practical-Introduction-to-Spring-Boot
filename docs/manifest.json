@@ -2,11 +2,5 @@
   "format": "mdpkg",
   "version": "2.0",
   "entrypoint": "index.md",
-  "resources": [
-    {
-      "source": "diagrams/drawing-1.draw.json",
-      "rendered": "diagrams/drawing-1.svg",
-      "type": "drawing"
-    }
-  ]
+  "resources": []
 }
