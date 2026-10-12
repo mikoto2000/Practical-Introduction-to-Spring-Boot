@@ -75,7 +75,7 @@ H2 DB は、デフォルトユーザー名 `sa`, パスワード無しでログ�
 
 次のコマンドを実行し、 Spring Boot アプリケーションが正常に起動することを確認してください。
 
-```sh
+```bash
 ./mvnw spring-boot:run
 ```
 
@@ -127,7 +127,7 @@ DDL はテーブルなどの構造を定義する SQL のことです。
 
 それではもう一度 Spring Boot アプリケーションを実行してみましょう。
 
-```sh
+```bash
 ./mvnw spring-boot:run
 ```
 
