@@ -181,6 +181,8 @@ public record OrderWithItemRequest(
 
 ### Mapper の作成
 
+MyBatis は、インターフェースのメソッド呼び出しを SQL 実行に変換するライブラリーです。`@Mapper` を付けたインターフェースは、MyBatis が実装を自動生成して Spring の Bean として登録します。実装クラスを書かなくても、Service に `OrderMapper` を注入して呼び出せます。メソッドと SQL の対応は、次のようにアノテーションで書きます。
+
 ```java title="OrderMapper.java"
 package dev.mikoto2000.springboot.database;
 
