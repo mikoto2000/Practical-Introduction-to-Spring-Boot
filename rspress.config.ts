@@ -43,6 +43,7 @@ export default defineConfig({
         { text: 'Spring Security 入門 Vol.2', link: '/SpringSecurity入門/Vol2' },
         { text: 'Spring Security テスト入門', link: '/SpringBootテスト入門/SpringSecurityテスト入門' },
         { text: 'DB を含む統合テスト入門', link: '/SpringBootテスト入門/DBを含む統合テスト入門' },
+        { text: 'E2E テスト入門', link: '/SpringBootテスト入門/E2Eテスト入門' },
       ],
     },
   },

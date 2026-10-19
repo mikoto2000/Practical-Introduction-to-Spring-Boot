@@ -21,6 +21,7 @@ Spring Boot が初めてでも、最初のプロジェクト作成ハンズオ�
 Spring Security 第2回は、第1回で作成したプロジェクトを続けて使います。
 DB を含む統合テスト入門は、DB アクセス・トランザクション入門の最終段階のプロジェクトを使います。
 Spring Security テスト入門は、独立したプロジェクトで進めます。
+E2E テスト入門は、Spring Security 第2回の最終段階のプロジェクトを使います。
 
 ## 学習の進め方
 
@@ -34,6 +35,7 @@ Spring Security テスト入門は、独立したプロジェクトで進めま�
 8. Spring Security 第1回・第2回で、認証・認可から DB を使うユーザー管理へ進む。
 9. Spring Security テストで、アクセスの許可・拒否とログイン・ログアウトを検証する。
 10. DB を含む統合テストで、API の応答と保存結果を H2・PostgreSQL で確認する。
+11. E2E テストで、ブラウザーからログイン・ユーザー登録・ログアウトを自動検証する。
 
 テストの目的から知りたい方は、開発者テスト入門をテスト入門より先に読んでも構いません。
 AOP、独自制約、構造化ログ、並行開発の運用は発展内容です。まず基本の動作確認まで進めてから戻りましょう。
@@ -41,6 +43,7 @@ DB マイグレーションでは CREATE TABLE / ALTER TABLE、Security 第2回�
 DB アクセス・トランザクションでは SELECT / INSERT / UPDATE / DELETE の基礎が必要です。
 例外処理・エラー応答は独立したプロジェクトで進めるため、DB の設定なしでも学べます。
 DB を含む統合テストの PostgreSQL 編では、Linux コンテナーを実行できる Docker 環境が必要です。
+E2E テストでは Node.js 24・npm と Playwright 用ブラウザーが必要です。テストは TypeScript で記述します。
 
 ## コマンドと動作確認の読み方
 
@@ -79,6 +82,7 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 | [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md) | DB認証と管理者だけの登録を確認 | 120 | 本番運用と入力検証 |
 | [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md) | 許可・拒否・CSRFの違いを確認 | 90 | ログイン・ログアウトの追加テスト |
 | [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md) | H2で保存と登録・削除失敗を検証 | 90 | PostgreSQL を次の60分で実施 |
+| [E2Eテスト入門](./SpringBootテスト入門/E2Eテスト入門.md) | ブラウザーでログイン・ユーザー登録・ログアウトを自動検証 | 90 | 権限差の検証・CIでの実行 |
 
 ## コンテンツ一覧
 
@@ -95,3 +99,4 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 11. [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md)
 12. [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
 13. [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
+14. [E2Eテスト入門](./SpringBootテスト入門/E2Eテスト入門.md)
