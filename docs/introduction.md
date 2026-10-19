@@ -75,8 +75,8 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 | [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md) | 2本のマイグレーションと履歴を確認 | 60 | 並行開発・outOfOrder |
 | [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md) | CRUD と登録失敗時のロールバックを確認 | 120 | プロキシ境界・削除失敗 |
 | [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md) | 404・409・400・500の契約を確認 | 90 | その他 MVC 例外・MockMvc の契約テスト |
-| [Vol1](./SpringSecurity入門/Vol1.md) | ログイン・ログアウトとページの保護 | 90 | 認証の内部構成 |
-| [Vol2](./SpringSecurity入門/Vol2.md) | DB認証と管理者だけの登録を確認 | 120 | 本番運用と入力検証 |
+| [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md) | ログイン・ログアウトとページの保護 | 90 | 認証の内部構成 |
+| [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md) | DB認証と管理者だけの登録を確認 | 120 | 本番運用と入力検証 |
 | [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md) | 許可・拒否・CSRFの違いを確認 | 90 | ログイン・ログアウトの追加テスト |
 | [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md) | H2で保存と登録・削除失敗を検証 | 90 | PostgreSQL を次の60分で実施 |
 
@@ -91,7 +91,7 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 7. [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md)
 8. [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md)
 9. [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md)
-10. [Vol1](./SpringSecurity入門/Vol1.md)
-11. [Vol2](./SpringSecurity入門/Vol2.md)
+10. [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md)
+11. [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md)
 12. [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
 13. [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
