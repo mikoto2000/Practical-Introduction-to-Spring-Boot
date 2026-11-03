@@ -688,6 +688,8 @@ Spring Security が読み込めるハッシュ形式のパスワードを生成�
 Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6` を利用し、
 `sec:authorize` で「ロールごとに表示・非表示を切り替える」を実現しています。
 
+ベースプロジェクトの `pom.xml` に `thymeleaf-extras-springsecurity6` が含まれていることを確認してください。Spring Boot 4.0 系（Spring Security 7）でも、このモジュールを使って `sec:authorize` を利用できます。`springsecurity7` という別モジュールは提供されていません。
+
 
 ##### ログイン画面
 
