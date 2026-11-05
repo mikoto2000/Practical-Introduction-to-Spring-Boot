@@ -139,7 +139,7 @@ Linux でブラウザーの実行に必要な OS ライブラリが足りない�
 初回取得後は、`package.json` と `package-lock.json` を保存します。
 別の環境では `npm ci` と `npx playwright install chromium` で準備します。
 使用した版は `npx playwright --version` で確認できます。
-公開教材にする際は、実行確認した版も記録してください。
+使用した版を記録しておくと、環境差で失敗したときの切り分けに役立ちます。
 
 `e2e/playwright.config.ts` を作成します。
 
