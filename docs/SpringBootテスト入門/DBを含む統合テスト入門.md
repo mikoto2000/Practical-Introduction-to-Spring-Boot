@@ -14,7 +14,7 @@ title: DB を含む統合テスト入門
 
 Controller、Service、Mapper、DB を接続した状態で、注文 API の結果を検証します。
 HTTP 応答だけでなく、保存された行や失敗後の DB 状態まで確認します。
-最初は H2 で実行し、その後 Testcontainers で PostgreSQL を起動して同じテストを実行します。
+最初は H2 で実行し、その後 Testcontainers で PostgreSQL を起動して同じテストを実行します。PostgreSQL の部分は発展内容で、基本編の 90 分には含みません。
 
 ## 対象読者
 
