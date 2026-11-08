@@ -27,7 +27,7 @@ Flyway は適用したファイルを履歴テーブルに記録し、未適用�
 
 
 生成された `pom.xml` の依存関係を確認してください。
-Spring Boot 4.0 系で H2 コンソールを使うため、次の依存関係も `dependencies` 内に追加します。
+Spring Boot 4.0 系で H2 コンソールを使うには `spring-boot-h2console` が必要です。Initializr で `h2` を選ぶと自動で追加されるため、次の依存関係はすでに含まれているはずです。含まれていない場合だけ `dependencies` 内に追加してください。
 
 ```xml
 <dependency>
@@ -140,8 +140,12 @@ DDL はテーブルなどの構造を定義する SQL のことです。
 2026-02-04T10:45:41.808Z  INFO 170450 --- [flyway] [  restartedMain] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": << Empty Schema >>
 2026-02-04T10:45:41.811Z  INFO 170450 --- [flyway] [  restartedMain] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "20260203.01 - add account table"
 2026-02-04T10:45:41.821Z  INFO 170450 --- [flyway] [  restartedMain] o.f.core.internal.command.DbMigrate      : Successfully applied 1 migration to schema "PUBLIC", now at version v20260203.01 (execution time 00:00.003s)
-2026-02-04T10:45:41.914Z  INFO 170450 --- [flyway] [  restartedMain] o.s.b.h.a.H2ConsoleAutoConfiguration     : H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./
+2026-02-04T10:45:41.914Z  INFO 170450 --- [flyway] [  restartedMain] o.s.b.h.a.H2ConsoleAutoConfiguration     : H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./target/workshopdb'
 ```
+
+:::note
+「起動確認」の時点でアプリを一度起動しているため、履歴テーブルがすでに作成されている場合があります。その場合、上の抜粋のうち `Schema history table ... does not exist yet` と `Creating Schema History table ...` の 2 行は表示されません。`Successfully applied 1 migration` まで進んでいれば成功です。
+:::
 
 ログ上では成功しているので、 `http://localhost:8080/h2-console` にアクセスし、テーブル定義が存在するか確認してみましょう。
 
@@ -257,6 +261,11 @@ Flyway は版番号を数値の区切りとして比較するので、`20260203.
 ## まとめ
 
 今回は、 Spring Boot と Flyway を組み合わせて使った場合の基本的な挙動について学びました。
+
+- `src/main/resources/db/migration` に `V<バージョン>__<説明>.sql` を置くと、起動時に Flyway が未適用分だけを実行する。
+- 適用結果は `flyway_schema_history` に記録され、再起動しても適用済みファイルは再実行されない。
+- 適用済みファイルは編集せず、変更は新しいバージョンのファイルとして追加する。
+- 履歴を合わせるためだけの `repair` はスキーマを直さない。
 
 どうやれば自分のプロジェクトに取り入れられるか、皆さんも考えてみてください。
 

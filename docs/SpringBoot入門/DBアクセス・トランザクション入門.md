@@ -72,6 +72,7 @@ Spring Web、Validation、JDBC API、H2 Database を追加し、MyBatis の依�
 
 `pom.xml` の `dependencies` に次を追加します。
 Initializr で MyBatis Framework を選んだ場合は、同じ依存関係を重複させずにバージョンを確認してください。
+`spring-boot-h2console` は Initializr で H2 Database を選ぶと自動で追加されるため、すでに含まれているはずです。含まれていない場合だけ追加してください。
 
 ```xml
 <dependency>
