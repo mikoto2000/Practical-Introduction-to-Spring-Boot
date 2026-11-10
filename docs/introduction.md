@@ -49,8 +49,8 @@ E2E テストでは Node.js 24・npm と Playwright 用ブラウザーが必要�
 
 コマンドは、各 Java プロジェクトの `pom.xml` があるディレクトリで実行します。
 シェルの例は Bash を前提にしています。Windows PowerShell では、Maven の `./mvnw` を `.\mvnw.cmd` に読み替えてください。
-PowerShell では `curl.exe` を使うと、同名の別コマンドとの混同を避けられます。
-複数行の Bash コマンドは Git Bash で実行してください。
+PowerShell で単純な GET リクエストを送る場合は、`curl.exe` を使います。
+JSON を引数として渡す例や、行末に `\` を使う複数行のコマンドは、Windows では Git Bash で実行してください。
 
 アプリ起動後は別のターミナルからリクエストを送り、HTTP ステータス・本文・ログを確認します。
 停止は Ctrl+C です。設定変更後や再起動の説明がある箇所では、前のプロセスを停止してから起動し直してください。

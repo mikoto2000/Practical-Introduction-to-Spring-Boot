@@ -10,7 +10,7 @@ title: E2E テスト入門
 発展内容・次回の目安: 権限差の検証と CI での起動・実行。基本の確認後に取り組んでください。
 準備と前後の章は [学習ガイド](../introduction.md) で確認できます。
 
-この章のコード例は、Playwright の版によって動作が変わる場合があります。`npx playwright --version` で実行した版を記録し、`package-lock.json` を保存してください。版が異なる環境では公式資料と照合してください。
+コード例の動作は Playwright の版に依存します。`npx playwright --version` で使用した版を記録し、`package-lock.json` を保存してください。
 
 ## 概要
 
@@ -102,7 +102,6 @@ spring:
 ```
 
 第2回の `schema.sql` と `data.sql` を使い、起動時にテーブルと初期管理者を用意します。
-この設定は、Spring Security 第2回の `schema.sql`・`data.sql` による初期化を前提にしています。
 Flyway などを独自に追加した場合は、初期化方法が重複しないように調整してください。
 
 Java プロジェクトの `pom.xml` があるディレクトリで起動します。
@@ -166,6 +165,7 @@ export default defineConfig({
 最初は Chromium だけで、1つずつテストを実行します。
 `baseURL` は操作対象アプリの URL です。`page.goto('/private')` などの基準になります。
 この設定では、Playwright はアプリを起動しません。先ほど起動したアプリに接続します。
+18080 番ポートを別のアプリが使っている場合は、`application-e2e.yaml` の `server.port` と `baseURL` のポート番号を空いている同じ番号に変更し、演習アプリを起動し直します。
 
 `e2e/.gitignore` も作成します。
 
@@ -240,7 +240,7 @@ test('管理者がユーザーを登録し、そのユーザーでログイン�
   // 登録後も管理者の認証状態が残るため、明示的にログアウトする。
   await page.goto('/');
   await page.getByRole('button', { name: 'ログアウト', exact: true }).click();
-  await expect(page).toHaveURL('http://localhost:18080/');
+  await expect(page).toHaveURL('/');
 
   await page.goto('/private');
   await expect(page).toHaveURL(/\/login(?:\?.*)?$/);
@@ -269,7 +269,7 @@ test('ログアウト後は保護ページを表示できない', async ({ page 
   await expect(page).toHaveURL(/\/private(?:\?.*)?$/);
 
   await page.getByRole('button', { name: 'ログアウト', exact: true }).click();
-  await expect(page).toHaveURL('http://localhost:18080/');
+  await expect(page).toHaveURL('/');
 
   await page.goto('/private');
   await expect(page).toHaveURL(/\/login(?:\?.*)?$/);
@@ -372,7 +372,7 @@ CSS の階層や要素の順番への依存を減らすと、見た目の変更�
 
 Playwright は、クリック対象が操作できる状態になるまで自動で待ちます。
 `await expect(locator).toBeVisible()` や `await expect(page).toHaveURL(...)` も、条件を満たすまで再試行します。
-`baseURL` を設定している場合、`toHaveURL` には `http://localhost:18080/` のような完全な URL ではなく、`/` のような相対パスも渡せます。
+`toHaveURL('/')` は、`baseURL` で指定したサーバーのトップページを期待する検証です。
 `await page.waitForTimeout(3000)` のような固定時間の待機を増やすと、高速な環境では無駄な待ち時間が生じます。
 低速な環境では待ち時間が足りず、失敗することもあります。観測できる結果を待ちましょう。
 

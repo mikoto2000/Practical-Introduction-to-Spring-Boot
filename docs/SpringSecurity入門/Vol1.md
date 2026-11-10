@@ -67,7 +67,7 @@ Spring Security を理解するうえで、最初に押さえるべきは「認�
 
 ### ベースプロジェクト
 
-[spring-boot-security-workshop-base.zip](https://github.com/mikoto2000/spring-boot-security-workshop/releases/download/v1.0.0/spring-boot-security-workshop-base.zip) をダウンロードし、展開してください。
+[spring-boot-security-workshop-base.zip](https://github.com/mikoto2000/spring-boot-security-handson/releases/download/v1.0.0/spring-boot-security-workshop-base.zip) をダウンロードし、展開してください。
 
 本ハンズオンでは、このベースプロジェクトを元に Spring Security のカスタマイズを行っていきます。
 配布 ZIP v1.0.0 の `pom.xml` は Java 25 を指定しています。この教材では Java 21 に揃えるため、起動前に次のプロパティへ変更してください。
@@ -449,9 +449,11 @@ Spring Security が提供するデフォルトでは、 `/logout` にアクセ�
 
 #### 動作確認
 
-`http://localhost:8080` へアクセスし、private へ遷移 -> ログイン -> ログアウト -> ルート -> private というように移動してみましょう。
-ログアウト後に `/private` へ進んでログイン画面が表示されれば成功です。
-ログイン済みのブラウザでは匿名時の動作が確認できないため、確認の前にログアウトするかプライベートウィンドウを使います。
+1. 未ログインのブラウザーで `http://localhost:8080/` を開き、「認証必須ページ」を選んでログインする。
+2. `/private` の「ログアウト」を選び、確認画面の `Log Out` ボタンを押す。
+3. `/login?logout` が表示されたら、アドレスバーから `http://localhost:8080/private` を開く。
+
+再びログインを求められれば成功です。
 
 
 ### まとめ
@@ -592,13 +594,14 @@ auth
 
 #### なぜ GET ではなく POST なのか
 
-ログアウトは状態を変更する操作です。状態を変更する操作を `GET` で実行すると、リンクを踏んだだけでログアウトが実行されてしまいます。例えば、リンク先の先読みで意図しないログアウトを招くおそれがあります。そのため、ログアウトのような状態変更は `POST` で実行するのが安全です。
+ログアウトは状態を変更する操作です。リンク先の先読みなどで意図せず実行されるのを避けるため、`GET` は確認画面の表示に使います。
+ログアウトを実行する `POST` には、確認画面のフォームが CSRF トークンを含めます。
 
 ハンズオンで追加した `<a href="/logout">` は `GET` なので、確認画面を経由してから `POST` でログアウトする、という流れになっています。
 
 #### ログアウト後の状態
 
-ログアウトが実行されると、セッションに保持されていた認証情報が破棄され、以降のリクエストは認証されていない状態として扱われます。ハンズオンでは、ログアウト後にルートへ戻り、再度 `/private` へアクセスするとログイン画面に遷移することを確認しました。
+ログアウトが実行されると、セッションに保持されていた認証情報が破棄されます。ハンズオンでは、ログアウト後に `/private` を開き直し、再認証を求められることを確認しました。
 
 ## 本番へ進む前の確認
 
@@ -633,6 +636,7 @@ auth
 
 ## 参考資料
 
+- [Spring Security のログアウト処理](https://docs.spring.io/spring-security/reference/servlet/authentication/logout.html)
 - [Spring Security :: Spring リファレンス](https://spring.pleiades.io/spring-security/reference/index.html)
 - [Password Storage :: Spring Security リファレンス](https://spring.pleiades.io/spring-security/reference/features/authentication/password-storage.html)
 - [Servlet アプリケーションのアーキテクチャ :: Spring Security リファレンス](https://spring.pleiades.io/spring-security/reference/servlet/architecture.html)
