@@ -180,6 +180,7 @@ public class LoginController {
 
 `GET /login` は Controller が画面を表示し、`POST /login` は Spring Security が認証を処理します。
 ログイン処理用の `@PostMapping` を自分で追加する必要はありません。
+未ログインで `/private` を開くと、Spring Security は元のリクエストを保存します。ログインが成功すると `/private` へ戻ります。
 
 #### ログアウトの仕組みを修正
 
@@ -807,7 +808,9 @@ Spring Security のデフォルトログインページは、動作確認には�
 
 ログアウトを `POST` で実行するとき、CSRF（クロスサイト・リクエスト・フォージェリ）対策が関わります。CSRF は、ユーザーが意図しないリクエストを送信させられる攻撃です。Spring Security はデフォルトで CSRF 対策を有効にしており、`POST` などの状態変更リクエストにはトークンが必要になります。
 
-ハンズオンでは `th:action="@{/logout}"` を使いました。Thymeleaf の `th:action` は、フォームに自動で CSRF トークンを挿入します。そのため、手動でトークンを扱わずに安全なログアウトフォームを作れます。
+ハンズオンでは `th:action="@{/logout}"` を使いました。
+Thymeleaf が POST フォームを描画すると、Spring MVC と Spring Security の連携により、CSRF トークンが隠しフィールドとして追加されます。
+ログインとユーザー登録の POST フォームも同じ仕組みを使います。
 
 #### ログアウト成功後のリダイレクト
 

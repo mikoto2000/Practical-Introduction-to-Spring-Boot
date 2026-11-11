@@ -65,6 +65,8 @@ Windows では Docker Desktop などの対応環境を起動し、Linux コン�
 ### プロジェクトの準備
 
 注文 API には MyBatis Starter 4.0.0、Validation、H2、Spring Web が入っています。
+`OrderService` の `createWithItem` と `delete` に `@Transactional` が付いていることを確認します。
+前の教材の練習で数量に `@Positive` を追加した場合は外します。数量 0 の明細を DB の CHECK 制約で失敗させるためです。
 `pom.xml` の `dependencies` に、次のテスト用依存関係を追加します。
 すでにある場合は重複させません。
 
@@ -95,7 +97,7 @@ spring:
 ### DB 更新失敗の HTTP 応答を定義
 
 前の教材では、DB 制約違反の本文を定義していませんでした。
-統合テストで HTTP 応答を検証するため、今回の演習では 500 と固定したコードを返します。
+統合テストで HTTP 応答を検証できるよう、この演習では HTTP 500 とエラーコード `DB_WRITE_FAILED` を返します。
 次のファイルを `src/main/java/dev/mikoto2000/springboot/database` に追加します。
 
 ```java title="OrderStorageExceptionHandler.java"
@@ -125,7 +127,6 @@ public class OrderStorageExceptionHandler {
 }
 ```
 
-数量に `@Positive` は付けず、DB の CHECK 制約で失敗する演習を続けます。
 通常の API では入力検証を追加し、業務上の重複などは原因を区別して 409 にする設計もできます。
 このハンドラーは、この演習の DB 制約違反を 500 とする契約です。
 共通エラー応答の設計は [例外処理・エラー応答入門](../SpringBoot入門/例外処理・エラー応答入門.md) を参照してください。
@@ -313,6 +314,8 @@ HTTP の取得結果と、JdbcTemplate で確認した DB の値を組み合わ�
 失敗した注文だけが取り消され、既存の注文が残ることを確認します。
 
 ### H2 で実行
+
+`OrderApiContract.java` と同じディレクトリに、次のファイルを追加します。
 
 ```java title="OrderApiH2Test.java"
 package dev.mikoto2000.springboot.database;

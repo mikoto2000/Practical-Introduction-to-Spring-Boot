@@ -25,6 +25,7 @@ Flyway は適用したファイルを履歴テーブルに記録し、未適用�
 
 [Spring Initializr](https://start.spring.io/#!type=maven-project&language=java&platformVersion=4.0.2&packaging=jar&configurationFileFormat=yaml&jvmVersion=21&groupId=dev.mikoto2000.springboot&artifactId=flyway&name=flyway&description=Demo%20project%20for%20Spring%20Boot%20and%20Flyway&packageName=dev.mikoto2000.springboot.flyway&dependencies=devtools,lombok,web,data-jdbc,h2,flyway)
 
+生成前に Spring Boot が 4.0 系であることを確認します。4.0.2 が表示されない場合は、利用可能な 4.0 系の安定版を選んでください。
 
 生成された `pom.xml` の依存関係を確認してください。
 Spring Boot 4.0 系で H2 コンソールを使うには `spring-boot-h2console` が必要です。Initializr で `h2` を選ぶと自動で追加されるため、次の依存関係はすでに含まれているはずです。含まれていない場合だけ `dependencies` 内に追加してください。

@@ -441,6 +441,9 @@ SELECT COUNT(*) FROM purchase_order WHERE customer_name = 'AfterTransaction';
 テストメソッドに `@Transactional` を付けると、そのトランザクションの影響で Service の設定漏れを見逃す場合があります。
 Service の境界を確認するテストは、テスト側のトランザクションで包まずに実行しましょう。
 
+練習で追加した `@Positive` は、演習を終えたら外してください。
+[DB を含む統合テスト入門](../SpringBootテスト入門/DBを含む統合テスト入門.md) では、数量 0 のリクエストを明細の INSERT まで通し、DB の CHECK 制約で失敗させます。
+
 ## 座学で学ぶ DB アクセス・トランザクション
 
 ### Controller / Service / Mapper の責務
