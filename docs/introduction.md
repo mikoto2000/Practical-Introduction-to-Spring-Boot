@@ -32,10 +32,11 @@ E2E テスト入門は、Spring Security 第2回の最終段階のプロジェ�
 5. ロギングと DB マイグレーションで、実行中の調査とデータベースの変更を学ぶ。
 6. DB アクセス・トランザクションで、CRUD と途中失敗時のロールバックを学ぶ。
 7. 例外処理・エラー応答で、業務上の失敗と想定外の失敗を共通の HTTP 応答にまとめる。
-8. Spring Security 第1回・第2回で、認証・認可から DB を使うユーザー管理へ進む。
-9. Spring Security テストで、アクセスの許可・拒否とログイン・ログアウトを検証する。
-10. DB を含む統合テストで、API の応答と保存結果を H2・PostgreSQL で確認する。
-11. E2E テストで、ブラウザーからログイン・ユーザー登録・ログアウトを自動検証する。
+8. RFC 9457 エラー返却で、同じ HTTP ステータスでも利用者が問題の種類を判断できる応答を設計する。
+9. Spring Security 第1回・第2回で、認証・認可から DB を使うユーザー管理へ進む。
+10. Spring Security テストで、アクセスの許可・拒否とログイン・ログアウトを検証する。
+11. DB を含む統合テストで、API の応答と保存結果を H2・PostgreSQL で確認する。
+12. E2E テストで、ブラウザーからログイン・ユーザー登録・ログアウトを自動検証する。
 
 テストの目的から知りたい方は、開発者テスト入門をテスト入門より先に読んでも構いません。
 AOP、独自制約、構造化ログ、並行開発の運用は発展内容です。まず基本の動作確認まで進めてから戻りましょう。
@@ -78,6 +79,7 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 | [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md) | 2本のマイグレーションと履歴を確認 | 60 | 並行開発・outOfOrder |
 | [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md) | CRUD と登録失敗時のロールバックを確認 | 120 | プロキシ境界・削除失敗 |
 | [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md) | 404・409・400・500の契約を確認 | 90 | その他 MVC 例外・MockMvc の契約テスト |
+| [RFC 9457 エラー返却入門](./SpringBoot入門/RFC9457エラー応答入門.md) | 同じ 409 の応答を比較し、入力違反をまとめる条件を説明 | 90（API は事前準備） | MockMvc・問題種別の登録と契約管理・メディアタイプ交渉 |
 | [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md) | ログイン・ログアウトとページの保護 | 90 | 認証の内部構成 |
 | [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md) | DB認証と管理者だけの登録を確認 | 120 | 本番運用と入力検証 |
 | [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md) | 許可・拒否・CSRFの違いを確認 | 90 | ログイン・ログアウトの追加テスト |
@@ -95,8 +97,9 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 7. [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md)
 8. [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md)
 9. [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md)
-10. [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md)
-11. [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md)
-12. [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
-13. [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
-14. [E2Eテスト入門](./SpringBootテスト入門/E2Eテスト入門.md)
+10. [RFC 9457 エラー返却入門](./SpringBoot入門/RFC9457エラー応答入門.md)
+11. [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md)
+12. [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md)
+13. [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
+14. [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
+15. [E2Eテスト入門](./SpringBootテスト入門/E2Eテスト入門.md)
