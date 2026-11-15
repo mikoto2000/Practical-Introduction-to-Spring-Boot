@@ -83,7 +83,7 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 | [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md) | 2本のマイグレーションと履歴を確認 | 60 | 並行開発・outOfOrder |
 | [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md) | CRUD と登録失敗時のロールバックを確認 | 120 | プロキシ境界、削除失敗は DB 統合テスト章で検証 |
 | [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md) | 404・409・400・500の契約を確認 | 90 | その他 MVC 例外・MockMvc の契約テスト |
-| [Spring Boot + RFC 9457 によるエラー返却入門](./SpringBoot入門/RFC9457エラー応答入門.md) | 3つの返し方の違いを説明し応答を確認 | 90 | 独自 problem type のカタログ設計 |
+| [Spring Boot + RFC 9457 によるエラー返却入門](./SpringBoot入門/RFC9457エラー応答入門.md) | 同じ 409 の応答を比較し、入力違反をまとめる条件を説明 | 90（API は事前準備） | MockMvc・問題種別の登録と契約管理・メディアタイプ交渉 |
 | [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md) | ログイン・ログアウトとページの保護 | 90 | 認証の内部構成 |
 | [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md) | DB認証と管理者だけの登録を確認 | 120 | 本番運用と入力検証 |
 | [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md) | 許可・拒否・CSRF、ログイン・ログアウトを検証 | 90 | 存在しないユーザー、CSRF なしのログアウト、認可ルール変更 |

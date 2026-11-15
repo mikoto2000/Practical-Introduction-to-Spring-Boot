@@ -39,6 +39,7 @@ export default defineConfig({
         { text: 'DB マイグレーション入門', link: '/SpringBoot入門/DBマイグレーション入門' },
         { text: 'DB アクセス・トランザクション入門', link: '/SpringBoot入門/DBアクセス・トランザクション入門' },
         { text: '例外処理・エラー応答入門', link: '/SpringBoot入門/例外処理・エラー応答入門' },
+        { text: 'RFC 9457 エラー返却入門', link: '/SpringBoot入門/RFC9457エラー応答入門' },
         { text: 'Spring Security 入門 Vol.1', link: '/SpringSecurity入門/Vol1' },
         { text: 'Spring Security 入門 Vol.2', link: '/SpringSecurity入門/Vol2' },
         { text: 'Spring Security テスト入門', link: '/SpringBootテスト入門/SpringSecurityテスト入門' },
