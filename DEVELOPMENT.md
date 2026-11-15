@@ -40,6 +40,9 @@ npm run build
 npm run preview
 ```
 
+アクセス解析を使う場合は、ビルド時の環境変数 `GA_ID` に Google Analytics の測定 ID を設定します。
+GitHub Pages のビルドには、GitHub Actions のリポジトリ変数 `GA_ID` が渡されます。空の場合は計測タグを出力しません。
+
 ## 変更の確認
 
 教材の文章を編集したら、次のコマンドで文章のチェックを実行します。

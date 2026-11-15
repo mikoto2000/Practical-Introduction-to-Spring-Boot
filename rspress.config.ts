@@ -5,6 +5,8 @@ import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginRstDirectives } from 'rspress-plugin-rst-directives';
 import { pluginPlantUml } from 'rspress-plugin-plantuml';
 
+const googleAnalyticsId = process.env.GA_ID?.trim();
+
 export default defineConfig({
   plugins: [
     pluginSitemap({
@@ -49,10 +51,6 @@ export default defineConfig({
     },
   },
   builderConfig: {
-    plugins: [
-      pluginGoogleAnalytics({
-        id: 'G-RTY3TRXY5T',
-      }),
-    ],
+    plugins: googleAnalyticsId ? [pluginGoogleAnalytics({ id: googleAnalyticsId })] : [],
   },
 });
