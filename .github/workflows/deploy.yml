@@ -32,6 +32,9 @@ jobs:
     - name: Lint
       run: npm run lint
 
+    - name: Check with Biome
+      run: npm run check
+
     - name: Build project
       env:
         GA_ID: ${{ vars.GA_ID }}
