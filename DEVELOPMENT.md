@@ -45,10 +45,12 @@ GitHub Pages のビルドには、GitHub Actions のリポジトリ変数 `GA_ID
 
 ## 変更の確認
 
-教材の文章を編集したら、次のコマンドで文章のチェックを実行します。
+変更を確認するには、CI と同じ順序で次のコマンドを実行します。
 
 ```bash
 npm run textlint
+npm run lint
+npm run check
 npm run build
 ```
 
