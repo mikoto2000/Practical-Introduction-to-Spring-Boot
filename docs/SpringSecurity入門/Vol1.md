@@ -41,8 +41,7 @@ Java 21 とブラウザを用意してください。HTML フォームの GET / 
 | [セキュリティの重要性](#セキュリティの重要性) | [認証と認可の違い](#認証と認可の違い) |
 | [認証と認可の軽い導入](#認証と認可の軽い導入) | [認証と認可の違い](#認証と認可の違い) |
 | [デフォルト時の動作確認](#デフォルト時の動作確認) | [認証と認可の違い](#認証と認可の違い) |
-| [ログインユーザー取得ロジックのカスタマイズ](#ログインユーザー取得ロジックのカスタマイズ) | [認証の仕組み（UserDetailsService）](#認証の仕組みuserdetailsservice) |
-| [ログインユーザー取得ロジックのカスタマイズ](#ログインユーザー取得ロジックのカスタマイズ) | [パスワードハッシュ（bcrypt / DelegatingPasswordEncoder）](#パスワードハッシュbcrypt--delegatingpasswordencoder) |
+| [ログインユーザー取得ロジックのカスタマイズ](#ログインユーザー取得ロジックのカスタマイズ) | [認証の仕組み（UserDetailsService）](#認証の仕組みuserdetailsservice)、[パスワードハッシュ（bcrypt / DelegatingPasswordEncoder）](#パスワードハッシュbcrypt--delegatingpasswordencoder) |
 | [認可のカスタマイズ](#認可のカスタマイズ) | [認可の仕組み（SecurityFilterChain / requestMatchers）](#認可の仕組みsecurityfilterchain--requestmatchers) |
 | [ログアウトの実装](#ログアウトの実装) | [ログアウトの仕組み](#ログアウトの仕組み) |
 
