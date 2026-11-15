@@ -593,6 +593,7 @@ public interface UsersMapper {
 ```java
 package dev.mikoto2000.security.controller;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -633,8 +634,8 @@ public class SignupController {
       // ユーザーをテーブルへインサート
       User user = new User(username, hashedPassword, true, "USER");
       usersMapper.insert(user);
-    } catch (RuntimeException e) {
-      log.error("ユーザー登録で例外が発生しました", e);
+    } catch (DuplicateKeyException e) {
+      log.warn("登録済みのユーザー名でユーザー登録が試行されました");
       return "redirect:/signup?error";
     }
 
@@ -774,7 +775,9 @@ Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6
 リンクを隠すだけではアクセスを防げません。必ず URL の認可設定とセットで確認してください。
 `/admin/**` のルールも定義しましたが、対応する画面は今回作りません。権限差は実装済みの `/signup` で確認します。
 
-この登録例は認証の仕組みに集中するため、入力検証や重複ユーザーの専用エラー処理を省略しています。
+この登録例は認証の仕組みに集中するため、入力検証を省略しています。
+登録済みのユーザー名を使うと、`users.username` の主キー制約で登録が失敗し、フォームへ戻ります。
+DB への接続失敗など、想定外の例外はサーバー側のエラーとして扱います。
 実際の登録機能に進むときは、バリデーション入門の方法で検証し、登録処理を Service にまとめます。
 
 
