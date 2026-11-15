@@ -33,6 +33,8 @@ jobs:
       run: npm run lint
 
     - name: Build project
+      env:
+        GA_ID: ${{ vars.GA_ID }}
       run: npm run build
 
     - name: Upload artifact
