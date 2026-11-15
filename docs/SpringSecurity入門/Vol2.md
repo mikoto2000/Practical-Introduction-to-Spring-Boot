@@ -691,6 +691,7 @@ Thymeleaf で認可情報を扱うために、 `thymeleaf-extras-springsecurity6
 `sec:authorize` で「ロールごとに表示・非表示を切り替える」を実現しています。
 
 ベースプロジェクトの `pom.xml` に `thymeleaf-extras-springsecurity6` が含まれていることを確認してください。Spring Boot 4.0 系（Spring Security 7）でも、このモジュールを使って `sec:authorize` を利用できます。`springsecurity7` という別モジュールは提供されていません。
+Spring Boot 4.0 系はこのモジュールのバージョンを管理しています。Thymeleaf の公式資料では、現行モジュールの Spring Security 7 との互換性は明記されていません。依存関係を更新したら、管理者と一般ユーザーでリンクの表示を確認してください。
 
 
 ##### ログイン画面
