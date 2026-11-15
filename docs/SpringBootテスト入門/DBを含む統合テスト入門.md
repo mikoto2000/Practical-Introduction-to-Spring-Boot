@@ -184,6 +184,8 @@ abstract class OrderApiContract {
 
   @BeforeEach
   void clearRows() {
+    // 補助テーブルが残っている場合は、参照先の行より先に削除します。
+    jdbc.execute("DROP TABLE IF EXISTS order_delete_guard");
     jdbc.update("DELETE FROM order_item");
     jdbc.update("DELETE FROM purchase_order");
   }
