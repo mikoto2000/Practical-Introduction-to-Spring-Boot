@@ -23,6 +23,16 @@ DB を含む統合テスト入門は、DB アクセス・トランザクショ�
 Spring Security テスト入門は、独立したプロジェクトで進めます。
 E2E テスト入門は、Spring Security 第2回の最終段階のプロジェクトを使います。
 
+### 章別の前提
+
+DB マイグレーションでは CREATE TABLE / ALTER TABLE、Spring Security 第2回では SELECT / INSERT の基礎が必要です。
+
+DB アクセス・トランザクションでは SELECT / INSERT / UPDATE / DELETE の基礎が必要です。
+
+DB を含む統合テストの PostgreSQL 編では、Linux コンテナーを実行できる Docker 環境が必要です。
+
+E2E テストでは Node.js 24・npm と Playwright 用ブラウザーが必要です。テストは TypeScript で記述します。
+
 ## 学習の進め方
 
 1. プロジェクト作成で、API の実装・起動・設定・jar の実行を体験する。
@@ -41,11 +51,7 @@ E2E テスト入門は、Spring Security 第2回の最終段階のプロジェ�
 テストの目的から知りたい方は、開発者テスト入門をテスト入門より先に読んでも構いません。
 例外処理・エラー応答の内容を踏まえ、次の RFC 9457 の章では仕様に沿った応答形式の設計を 90 分で学びます。
 AOP、独自制約、構造化ログ、並行開発の運用は発展内容です。まず基本の動作確認まで進めてから戻りましょう。
-DB マイグレーションでは CREATE TABLE / ALTER TABLE、Security 第2回では SELECT / INSERT の基礎が必要です。
-DB アクセス・トランザクションでは SELECT / INSERT / UPDATE / DELETE の基礎が必要です。
 例外処理・エラー応答は独立したプロジェクトで進めるため、DB の設定なしでも学べます。
-DB を含む統合テストの PostgreSQL 編では、Linux コンテナーを実行できる Docker 環境が必要です。
-E2E テストでは Node.js 24・npm と Playwright 用ブラウザーが必要です。テストは TypeScript で記述します。
 
 ## コマンドと動作確認の読み方
 
