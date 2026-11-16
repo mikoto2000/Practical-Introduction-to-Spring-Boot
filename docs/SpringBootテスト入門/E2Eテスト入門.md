@@ -85,6 +85,7 @@ E2E 用に、`src/main/resources/application-e2e.yaml` を追加します。
 
 ```yaml
 server:
+  address: 127.0.0.1
   port: 18080
 
 spring:
@@ -101,6 +102,7 @@ spring:
       enabled: false
 ```
 
+E2E プロファイルでも、固定の管理者アカウントを使うためループバックアドレスで待ち受けます。
 第2回の `schema.sql` と `data.sql` を使い、起動時にテーブルと初期管理者を用意します。
 Flyway などを独自に追加した場合は、初期化方法が重複しないように調整してください。
 
@@ -120,7 +122,7 @@ Windows PowerShell では、次のコマンドを使います。
 `Port 18080 was already in use` が出た場合は、`application-e2e.yaml` の `server.port` を空いている番号に変えて起動し直します。
 以降の確認 URL と Playwright の `baseURL` にも同じポート番号を使います。
 
-ブラウザーで `http://localhost:18080/` を開き、演習アプリの「認証必須ページ」へのリンクが表示されれば準備完了です。
+ブラウザーで `http://127.0.0.1:18080/` を開き、演習アプリの「認証必須ページ」へのリンクが表示されれば準備完了です。
 このターミナルではアプリを起動したままにします。
 
 ### Playwright の準備
@@ -155,7 +157,7 @@ export default defineConfig({
   retries: 0,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'http://localhost:18080',
+    baseURL: 'http://127.0.0.1:18080',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
