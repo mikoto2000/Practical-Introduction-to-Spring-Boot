@@ -18,6 +18,7 @@ export default defineConfig({
   ],
   root: fileURLToPath(new URL('./docs', import.meta.url)),
   base: '/Practical-Introduction-to-Spring-Boot/',
+  lang: 'ja',
   title: 'Spring Boot 実践入門',
   icon: '/spring.svg',
   logo: '/spring-2.svg',
