@@ -125,7 +125,7 @@ public class SecurityConfig {
 
 `src/main/java/dev/mikoto2000/security/controller/LoginController.java`:
 
-```java
+```java title="LoginController.java"
 package dev.mikoto2000.security.controller;
 
 import org.springframework.stereotype.Controller;
@@ -217,7 +217,7 @@ CSRF 対策のため、 Thymeleaf の機能を用いて `form` を構築しま�
 
 `src/main/resources/templates/private.html`:
 
-```html
+```html title="private.html"
 <!DOCTYPE html>
 <html>
 <head>
@@ -279,7 +279,7 @@ role カラムを用意していますが、本格的な RBAC（ロール設計�
 
 `src/main/resources/schema.sql`:
 
-```sql
+```sql title="schema.sql"
 CREATE TABLE USERS (
   username VARCHAR(50) PRIMARY KEY,
   password VARCHAR(255) NOT NULL,
@@ -290,7 +290,7 @@ CREATE TABLE USERS (
 
 `src/main/resources/data.sql`:
 
-```sql
+```sql title="data.sql"
 INSERT INTO USERS (username, password, enabled, role)
 VALUES
 (
@@ -315,7 +315,7 @@ VALUES
 
 `src/main/java/dev/mikoto2000/security/entity/User.java`:
 
-```java
+```java title="User.java"
 package dev.mikoto2000.security.entity;
 
 import lombok.AllArgsConstructor;
@@ -377,7 +377,7 @@ public interface UsersMapper {
 
 `src/main/java/dev/mikoto2000/security/configuration/UserDetailsServiceImpl.java`:
 
-```java
+```java title="UserDetailsServiceImpl.java"
 package dev.mikoto2000.security.configuration;
 
 import org.springframework.security.core.userdetails.User;
@@ -452,7 +452,7 @@ SecurityConfig に、以下の修正を加えます。
 <details>
 <summary>SecurityConfig の完成コード</summary>
 
-```java
+```java title="SecurityConfig.java"
 package dev.mikoto2000.security.configuration;
 
 import org.springframework.context.annotation.Bean;
@@ -524,7 +524,7 @@ public class SecurityConfig {
 
 `src/main/java/dev/mikoto2000/security/repository/UsersMapper.java`:
 
-```java
+```java title="UsersMapper.java"
 package dev.mikoto2000.security.repository;
 
 import java.util.Optional;
@@ -590,7 +590,7 @@ public interface UsersMapper {
 <details>
 <summary>SignupController の完成コード</summary>
 
-```java
+```java title="SignupController.java"
 package dev.mikoto2000.security.controller;
 
 import org.springframework.dao.DuplicateKeyException;
@@ -663,7 +663,7 @@ Spring Security が読み込めるハッシュ形式のパスワードを生成�
 
 `src/main/resources/templates/index.html`:
 
-```html
+```html title="index.html"
 <!DOCTYPE html>
 <html>
 <head>
@@ -702,7 +702,7 @@ Spring Boot 4.0 系はこのモジュールのバージョンを管理してい�
 
 `src/main/resources/templates/login.html`:
 
-```html
+```html title="login.html"
 <!DOCTYPE html>
 <html>
   <head>
@@ -736,7 +736,7 @@ Spring Boot 4.0 系はこのモジュールのバージョンを管理してい�
 
 `src/main/resources/templates/signup.html` を作成し、ユーザー名とパスワードを入力する画面を追加します。
 
-```html
+```html title="signup.html"
 <!DOCTYPE html>
 <html>
   <head>

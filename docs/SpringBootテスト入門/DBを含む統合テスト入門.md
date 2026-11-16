@@ -70,7 +70,7 @@ Windows では Docker Desktop などの対応環境を起動し、Linux コン�
 `pom.xml` の `dependencies` に、次のテスト用依存関係を追加します。
 すでにある場合は重複させません。
 
-```xml
+```xml title="Web MVC テストの依存関係"
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-webmvc-test</artifactId>
@@ -80,7 +80,7 @@ Windows では Docker Desktop などの対応環境を起動し、Linux コン�
 
 `src/test/resources/application-integration.yaml` を作成します。
 
-```yaml
+```yaml title="application-integration.yaml"
 spring:
   sql:
     init:
@@ -349,7 +349,7 @@ MockMvc は実際の HTTP サーバーを起動せず、アプリのリクエス
 Spring Boot 4.0 系が管理する Testcontainers 2 系のモジュール名と import を使います。
 1 系の `postgresql` モジュールや `org.testcontainers.containers.PostgreSQLContainer` と混在させないでください。
 
-```xml
+```xml title="PostgreSQL テストの依存関係"
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-testcontainers</artifactId>
