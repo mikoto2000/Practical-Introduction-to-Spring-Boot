@@ -83,7 +83,7 @@ Docker は使わず、既存アプリのインメモリー H2 を利用します
 手動確認が終わったら、アプリを Ctrl+C で停止します。
 E2E 用に、`src/main/resources/application-e2e.yaml` を追加します。
 
-```yaml
+```yaml title="application-e2e.yaml"
 server:
   address: 127.0.0.1
   port: 18080
@@ -223,7 +223,7 @@ npx playwright test --headed
 
 同じ `tests/auth.spec.ts` の末尾に追加します。
 
-```typescript
+```typescript title="tests/auth.spec.ts に追加（ユーザー登録）"
 test('管理者がユーザーを登録し、そのユーザーでログインできる', async ({ page }) => {
   const username = `e2e-${randomUUID()}`;
   const password = 'E2e-example-123!';
@@ -265,7 +265,7 @@ test('管理者がユーザーを登録し、そのユーザーでログイン�
 
 さらに、同じファイルの末尾に追加します。
 
-```typescript
+```typescript title="tests/auth.spec.ts に追加（ログアウト）"
 test('ログアウト後は保護ページを表示できない', async ({ page }) => {
   await page.goto('/private');
   await expect(page).toHaveURL(/\/login(?:\?.*)?$/);

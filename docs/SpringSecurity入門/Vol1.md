@@ -81,7 +81,7 @@ Spring Security を理解するうえで、最初に押さえるべきは「認�
 
 起動前に `src/main/resources/application.yaml` のトップレベルに次の設定を追加します。後半では固定の資格情報を使うため、待ち受け先をループバックアドレスに限定します。第2回でもこの設定を使います。
 
-```yaml
+```yaml title="ループバックの設定"
 server:
   address: 127.0.0.1
 ```
@@ -115,7 +115,7 @@ Windows PowerShell では `.\mvnw.cmd spring-boot:run` を使います。
 
 `src/main/java/dev/mikoto2000/security/controller/IndexController.java` に、以下 java ファイルを配置します。
 
-```java
+```java title="IndexController.java"
 package dev.mikoto2000.security.controller;
 
 import org.springframework.stereotype.Controller;
@@ -267,7 +267,7 @@ DB からの取得は [第2回](./Vol2.md) で実装します。
 
 インデックスページと同じように、`src/main/java/dev/mikoto2000/security/controller/PrivateController.java` を作成します。
 
-```java
+```java title="PrivateController.java"
 package dev.mikoto2000.security.controller;
 
 import org.springframework.stereotype.Controller;

@@ -56,3 +56,17 @@ npm run build
 
 チェックに加え、プレビューで見出し、コードブロック、画像、リンクを確認してください。
 教材のコード例はサイトのビルドだけでは検証されないため、実行手順を変えた場合は Java プロジェクトでも確認します。
+
+## 教材コードの実行検証
+
+PR では、注文 API の H2・PostgreSQL 統合テストと、Security のログイン・登録・ログアウトを Chromium で実行します。CI は教材のコードブロックから一時ディレクトリにプロジェクトを組み立てます。コード例を更新するときは、対応するコードブロックの `title` を変更した場合も生成スクリプトを更新してください。
+
+Java 21、Maven、Python 3、Docker が利用できる環境では、リポジトリのルートから注文 API を検証できます。
+
+```bash
+orders_dir=$(mktemp -d)
+python3 .github/scripts/prepare-exercises.py "$orders_dir"
+mvn -f "$orders_dir/pom.xml" test
+```
+
+Security と Playwright のプロジェクト生成および実行コマンドは [教材コードの検証ワークフロー](.github/workflows/exercises.yml) を参照してください。
