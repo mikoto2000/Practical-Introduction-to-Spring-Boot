@@ -32,6 +32,9 @@ SQL の SELECT / INSERT / UPDATE / DELETE と、Java の例外の基本を前提
 Spring Web、Validation、JDBC API、H2 Database を追加し、MyBatis の依存関係を後から追加します。
 この教材では Lombok と Spring Security は使いません。
 
+生成直後のビルドで `Non-resolvable parent POM` が出た場合は、`pom.xml` の `<parent>` にある Spring Boot のバージョンを確認します。
+末尾に `.RELEASE` が付き、そのバージョンが Maven Central に見つからない場合は、`4.0.9.RELEASE` を `4.0.9` にするように、公開されている版の表記に合わせます。
+
 完了時には、CRUD の SQL を Mapper に配置し、Service にトランザクション境界を定義できることを目指します。
 成功時と失敗時の違いを、HTTP 応答と DB の両方で説明できるようにしましょう。
 
