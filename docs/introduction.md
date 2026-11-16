@@ -80,18 +80,18 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 | 1 | [プロジェクト作成・デプロイ入門](./SpringBoot入門/プロジェクト作成・デプロイ入門.md) | API 起動・設定変更・jar 実行 | 60 | デプロイ環境の比較 |
 | 2 | [バリデーション入門](./SpringBoot入門/バリデーション入門.md) | 不正入力を400で拒否 | 90 | 独自制約・多言語対応 |
 | 3 | [テスト入門](./SpringBootテスト入門/テスト入門.md) | Util と Service のテストを実行 | 90 | Repository・Controller（60 分）、章内のテスト設計演習（20〜30 分） |
-| 3 | [開発者テスト入門_テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md) | 同値分割と境界値でケースを選ぶ | 60 | 状態遷移・Pairwise |
+| 3 | [開発者テスト入門 - テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md) | 同値分割と境界値でケースを選ぶ | 60 | 状態遷移・Pairwise |
 | 4 | [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md) | DTO の境界値と Web の400を検証 | 90 | Advice の独立テスト |
 | 5 | [ロギング入門](./SpringBoot入門/ロギング入門.md) | アクセスログ・MDC・業務ログを確認 | 90 | AOP・構造化ログ |
-| 5 | [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md) | 2本のマイグレーションと履歴を確認 | 60 | 並行開発・outOfOrder |
-| 6 | [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md) | CRUD と登録失敗時のロールバックを確認 | 120 | プロキシ境界、削除失敗は DB 統合テスト章で検証 |
+| 5 | [DB マイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md) | 2本のマイグレーションと履歴を確認 | 60 | 並行開発・outOfOrder |
+| 6 | [DB アクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md) | CRUD と登録失敗時のロールバックを確認 | 120 | プロキシ境界、削除失敗は DB 統合テスト章で検証 |
 | 7 | [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md) | 404・409・400・500の契約を確認 | 90 | その他 MVC 例外・MockMvc の契約テスト |
 | 8 | [RFC 9457 エラー返却入門](./SpringBoot入門/RFC9457エラー応答入門.md) | 同じ 409 の応答を比較し、入力違反をまとめる条件を説明 | 90（API は事前準備） | MockMvc・問題種別の登録と契約管理・メディアタイプ交渉 |
 | 9 | [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md) | ログイン・ログアウトとページの保護 | 90 | 認証の内部構成 |
 | 9 | [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md) | DB認証と管理者だけの登録を確認 | 120 | 本番運用と入力検証 |
-| 10 | [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md) | 許可・拒否・CSRF、ログイン・ログアウトを検証 | 90 | 存在しないユーザー、CSRF なしのログアウト、認可ルール変更 |
-| 11 | [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md) | H2で保存と登録・削除失敗を検証（DB アクセス章の完成版が前提） | 90 | PostgreSQL を次の 60 分で実施 |
-| 12 | [E2Eテスト入門](./SpringBootテスト入門/E2Eテスト入門.md) | ブラウザーでログイン・ユーザー登録・ログアウトを自動検証 | 90 | 権限差の検証・CIでの実行 |
+| 10 | [Spring Security テスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md) | 許可・拒否・CSRF、ログイン・ログアウトを検証 | 90 | 存在しないユーザー、CSRF なしのログアウト、認可ルール変更 |
+| 11 | [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md) | H2で保存と登録・削除失敗を検証（DB アクセス章の完成版が前提） | 90 | PostgreSQL を次の 60 分で実施 |
+| 12 | [E2E テスト入門](./SpringBootテスト入門/E2Eテスト入門.md) | ブラウザーでログイン・ユーザー登録・ログアウトを自動検証 | 90 | 権限差の検証・CIでの実行 |
 
 テスト入門の発展演習では、実装したコードを使ってテストケースを選びます。開発者テスト入門では、同値分割や境界値分析の考え方を詳しく学びます。
 
@@ -100,15 +100,15 @@ Security は ZIP と Java 設定、DB 発展編は Docker の起動とイメー�
 1. [プロジェクト作成・デプロイ入門](./SpringBoot入門/プロジェクト作成・デプロイ入門.md)
 2. [バリデーション入門](./SpringBoot入門/バリデーション入門.md)
 3. [テスト入門](./SpringBootテスト入門/テスト入門.md)
-4. [開発者テスト入門_テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md)
+4. [開発者テスト入門 - テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md)
 5. [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md)
 6. [ロギング入門](./SpringBoot入門/ロギング入門.md)
-7. [DBマイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md)
-8. [DBアクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md)
+7. [DB マイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md)
+8. [DB アクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md)
 9. [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md)
 10. [RFC 9457 エラー返却入門](./SpringBoot入門/RFC9457エラー応答入門.md)
 11. [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md)
 12. [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md)
-13. [SpringSecurityテスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
-14. [DBを含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
-15. [E2Eテスト入門](./SpringBootテスト入門/E2Eテスト入門.md)
+13. [Spring Security テスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
+14. [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
+15. [E2E テスト入門](./SpringBootテスト入門/E2Eテスト入門.md)

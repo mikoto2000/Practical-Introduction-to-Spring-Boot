@@ -44,7 +44,7 @@ export default defineConfig({
         },
         { text: 'テスト入門', link: '/SpringBootテスト入門/テスト入門' },
         {
-          text: '開発者テスト入門 - テストとは？編',
+          text: '開発者テスト入門 - テストとは編',
           link: '/SpringBootテスト入門/開発者テスト入門_テストとは編',
         },
         {
