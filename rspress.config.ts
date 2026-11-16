@@ -85,6 +85,10 @@ export default defineConfig({
           link: '/SpringBootテスト入門/DBを含む統合テスト入門',
         },
         { text: 'E2E テスト入門', link: '/SpringBootテスト入門/E2Eテスト入門' },
+        {
+          text: 'Spring Boot Actuator 入門',
+          link: '/SpringBoot入門/Actuator入門',
+        },
       ],
     },
   },
