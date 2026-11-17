@@ -322,6 +322,8 @@ curl -sS -w '\nHTTP %{http_code}, %{time_total}s\n' http://127.0.0.1:8080/shippi
 2. `maintenance` の照会で、配送 API と送料照会アプリが返すステータスをそれぞれ答える。
 3. 模擬 API を停止したときの接続拒否と、起動中の `slow` のタイムアウトを、利用者がどう区別できるか説明する。
 
+続編の [リトライ入門](./リトライ入門.md) では、同じ模擬 API を使って、再試行の条件と回数の上限、試行間の待ち時間を確認します。
+
 ## 参考資料
 
 - [Spring Boot 4.0 リファレンス — Calling REST Services](https://docs.spring.io/spring-boot/4.0/reference/io/rest-client.html)
