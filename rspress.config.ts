@@ -82,6 +82,10 @@ export default defineConfig({
           link: '/SpringBootテスト入門/SpringSecurityテスト入門',
         },
         {
+          text: 'Spring Session 入門',
+          link: '/SpringBoot入門/SpringSession入門',
+        },
+        {
           text: 'DB を含む統合テスト入門',
           link: '/SpringBootテスト入門/DBを含む統合テスト入門',
         },
@@ -89,6 +93,32 @@ export default defineConfig({
         {
           text: 'Spring Boot Actuator 入門',
           link: '/SpringBoot入門/Actuator入門',
+        },
+        {
+          text: '定期実行入門',
+          link: '/SpringBoot入門/定期実行入門',
+        },
+        {
+          text: 'クライアントシリーズ',
+          collapsed: false,
+          items: [
+            {
+              text: '外部 API 連携入門',
+              link: '/SpringBoot入門/外部API連携入門',
+            },
+            {
+              text: 'リトライ入門',
+              link: '/SpringBoot入門/リトライ入門',
+            },
+            {
+              text: 'キャッシュ入門',
+              link: '/SpringBoot入門/キャッシュ入門',
+            },
+            {
+              text: 'Redis キャッシュ入門',
+              link: '/SpringBoot入門/Redisキャッシュ入門',
+            },
+          ],
         },
       ],
     },
