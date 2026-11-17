@@ -90,6 +90,24 @@ export default defineConfig({
           text: 'Spring Boot Actuator 入門',
           link: '/SpringBoot入門/Actuator入門',
         },
+        {
+          text: 'クライアントシリーズ',
+          collapsed: false,
+          items: [
+            {
+              text: '外部 API 連携入門',
+              link: '/SpringBoot入門/外部API連携入門',
+            },
+            {
+              text: 'リトライ入門',
+              link: '/SpringBoot入門/リトライ入門',
+            },
+            {
+              text: 'キャッシュ入門',
+              link: '/SpringBoot入門/キャッシュ入門',
+            },
+          ],
+        },
       ],
     },
   },
