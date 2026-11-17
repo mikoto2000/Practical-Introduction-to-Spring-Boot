@@ -23,6 +23,8 @@ DB を含む統合テスト入門は、DB アクセス・トランザクショ�
 Spring Security テスト入門は、独立したプロジェクトで進めます。
 E2E テスト入門は、Spring Security 第2回の最終段階のプロジェクトを使います。
 Actuator 入門は、DB アクセス・トランザクション入門で作った注文 API の完成版を使います。
+リトライ入門は、外部 API 連携入門で作った送料照会アプリと模擬配送 API を使います。
+Redis キャッシュ入門は、キャッシュ入門の商品価格 API の完成版を使います。
 
 ### 章別の前提
 
@@ -30,7 +32,7 @@ DB マイグレーションでは CREATE TABLE / ALTER TABLE、Spring Security �
 
 DB アクセス・トランザクションでは SELECT / INSERT / UPDATE / DELETE の基礎が必要です。
 
-DB を含む統合テストの PostgreSQL 編と Actuator 入門では、Linux コンテナーを実行できる Docker 環境が必要です。
+Spring Session 入門、DB を含む統合テストの PostgreSQL 編、Actuator 入門、Redis キャッシュ入門では、Linux コンテナーを実行できる Docker 環境が必要です。
 
 E2E テストでは Node.js 24・npm と Playwright 用ブラウザーが必要です。テストは TypeScript で記述します。
 
@@ -46,9 +48,17 @@ E2E テストでは Node.js 24・npm と Playwright 用ブラウザーが必要�
 8. RFC 9457 エラー返却で、独自の `type` を使って同じ HTTP ステータスでも問題の種類を区別し、複数の入力違反をまとめる方法を学ぶ。
 9. Spring Security 第1回・第2回で、認証・認可から DB を使うユーザー管理へ進む。
 10. Spring Security テストで、アクセスの許可・拒否とログイン・ログアウトを検証する。
-11. DB を含む統合テストで、API の応答と保存結果を H2・PostgreSQL で確認する。
-12. E2E テストで、ブラウザーからログイン・ユーザー登録・ログアウトを自動検証する。
-13. Actuator 入門で、注文 API の DB 障害をヘルスチェックで検知し、メトリクスとログで影響を調べる。
+11. Spring Session 入門で、2 つのアプリから Redis に保存した HTTP セッションを参照し、無効化する。
+12. DB を含む統合テストで、API の応答と保存結果を H2・PostgreSQL で確認する。
+13. E2E テストで、ブラウザーからログイン・ユーザー登録・ログアウトを自動検証する。
+14. Actuator 入門で、注文 API の DB 障害をヘルスチェックで検知し、メトリクスとログで影響を調べる。
+15. 定期実行入門で、`@Scheduled` を使って処理を繰り返し、開始と終了のログで間隔を比べる。
+16. 外部 API 連携入門で、`RestClient` を使って配送 API を呼び出し、HTTP エラーとタイムアウトを扱う。
+17. リトライ入門で、配送 API を再試行する条件、回数の上限、試行間の待ち時間を確かめる。
+18. キャッシュ入門で、同じ商品の再取得を省き、価格を更新したときに該当するキャッシュを無効化する。
+19. Redis キャッシュ入門で、価格更新によるキーの削除と TTL による期限切れを確認する。
+
+段階 16〜19 は [クライアントシリーズ](#クライアントシリーズ) です。外部 API 連携からリトライへ進みます。キャッシュ入門と Redis キャッシュ入門は共通のプロジェクトで演習します。
 
 テストの目的から知りたい方は、開発者テスト入門をテスト入門より先に読んでも構いません。
 例外処理・エラー応答の内容を踏まえ、次の RFC 9457 の章では仕様に沿った応答形式の設計を 90 分で学びます。
@@ -77,7 +87,7 @@ Security の配布 ZIP は Java 25 指定なので、第1回の手順で `pom.xm
 
 次の時間は、初回説明と動作確認を含む目安です。受講者の経験に合わせて分割してください。
 開始前に JDK 21 の準備と Maven の依存取得を済ませ、新規作成する章では指定のプロジェクトを用意します。前の章を引き継ぐ場合は「対象者と前提知識」の指定に従ってください。
-Security は ZIP と Java 設定を確認します。DB 統合テストの発展編と Actuator 入門では、Docker の起動とイメージ取得も事前に確認します。
+Security は ZIP と Java 設定を確認します。Docker を使う章では、Docker の起動とイメージ取得も事前に確認します。
 各章の「講義の区切り」で基本の終了条件を確認し、発展内容は復習や次回へ回せます。
 
 段階番号が同じ行は、同じ学習段階に含まれます。テスト入門と開発者テスト入門は、どちらから始めても構いません。
@@ -98,11 +108,17 @@ Security は ZIP と Java 設定を確認します。DB 統合テストの発展
 | 9 | [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md) | ログイン・ログアウトとページの保護 | 90 | 認証の内部構成 |
 | 9 | [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md) | DB認証と管理者だけの登録を確認 | 120 | 本番運用と入力検証 |
 | 10 | [Spring Security テスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md) | 許可・拒否・CSRF、ログイン・ログアウトを検証 | 90 | 存在しないユーザー、CSRF なしのログアウト、認可ルール変更 |
-| 11 | [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md) | H2で保存と登録・削除失敗を検証（DB アクセス章の完成版が前提） | 90 | PostgreSQL 編（追加で 60 分） |
-| 12 | [E2E テスト入門](./SpringBootテスト入門/E2Eテスト入門.md) | ブラウザーでログイン・ユーザー登録・ログアウトを自動検証 | 90 | 権限差の検証・CIでの実行 |
-| 13 | [Spring Boot Actuator 入門](./SpringBoot入門/Actuator入門.md) | DB の停止・復旧を検知し、注文取得の件数と処理時間をステータス別に確認 | 60〜90 | 管理用エンドポイントの認証・認可 |
+| 11 | [Spring Session 入門](./SpringBoot入門/SpringSession入門.md) | HTTP セッションを 2 つのアプリで共有し、無効化を確認 | 60〜90 | アプリ再起動後のセッション参照 |
+| 12 | [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md) | H2で保存と登録・削除失敗を検証（DB アクセス章の完成版が前提） | 90 | PostgreSQL 編（追加で 60 分） |
+| 13 | [E2E テスト入門](./SpringBootテスト入門/E2Eテスト入門.md) | ブラウザーでログイン・ユーザー登録・ログアウトを自動検証 | 90 | 権限差の検証・CIでの実行 |
+| 14 | [Spring Boot Actuator 入門](./SpringBoot入門/Actuator入門.md) | DB の停止・復旧を検知し、注文取得の件数と処理時間をステータス別に確認 | 60〜90 | 管理用エンドポイントの認証・認可 |
+| 15 | [定期実行入門](./SpringBoot入門/定期実行入門.md) | `fixedRate` と `fixedDelay` の実行間隔をログで比較 | 45 | 処理時間が設定間隔を超える場合 |
+| 16 | [外部 API 連携入門](./SpringBoot入門/外部API連携入門.md) | 配送 API から送料を取得し、HTTP エラーとタイムアウトを区別 | 60〜90 | 接続拒否の確認 |
+| 17 | [リトライ入門](./SpringBoot入門/リトライ入門.md) | 配送 API の 503 を再試行し、回数の上限と待ち時間の影響を確認 | 60 | |
+| 18 | [キャッシュ入門](./SpringBoot入門/キャッシュ入門.md) | 再取得の省略と、価格更新後のキャッシュの無効化を確認 | 60 | 別商品のキャッシュを確認 |
+| 19 | [Redis キャッシュ入門](./SpringBoot入門/Redisキャッシュ入門.md) | 更新による削除と TTL による期限切れを Redis のキーで確認 | 60 | |
 
-全16章の基本編の目安を合計すると約 23〜23.5 時間です。事前準備と発展演習の時間は別に確保してください。
+全22章の基本編の目安を合計すると約 29〜30.5 時間です。事前準備と発展演習の時間は別に確保してください。
 
 テスト入門の発展演習では、実装したコードを使ってテストケースを選びます。開発者テスト入門では、同値分割や境界値分析の考え方を詳しく学びます。
 
@@ -121,6 +137,15 @@ Security は ZIP と Java 設定を確認します。DB 統合テストの発展
 11. [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md)
 12. [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md)
 13. [Spring Security テスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
-14. [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
-15. [E2E テスト入門](./SpringBootテスト入門/E2Eテスト入門.md)
-16. [Spring Boot Actuator 入門](./SpringBoot入門/Actuator入門.md)
+14. [Spring Session 入門 — Redis で HTTP セッションを共有する](./SpringBoot入門/SpringSession入門.md)
+15. [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
+16. [E2E テスト入門](./SpringBootテスト入門/E2Eテスト入門.md)
+17. [Spring Boot Actuator 入門](./SpringBoot入門/Actuator入門.md)
+18. [Spring Boot 定期実行入門 — fixedRate と fixedDelay](./SpringBoot入門/定期実行入門.md)
+
+### クライアントシリーズ
+
+19. [Spring Boot 外部 API 連携入門 — RestClient とタイムアウト](./SpringBoot入門/外部API連携入門.md)
+20. [Spring Boot リトライ入門 — 条件・回数・待ち時間](./SpringBoot入門/リトライ入門.md)
+21. [Spring Boot キャッシュ入門 — 再取得の省略と更新時の無効化](./SpringBoot入門/キャッシュ入門.md)
+22. [Spring Boot Redis キャッシュ入門 — 削除と TTL](./SpringBoot入門/Redisキャッシュ入門.md)
