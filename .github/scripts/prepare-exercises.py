@@ -89,6 +89,17 @@ def prepare_orders(project):
     copyfile(FIXTURES / "DatabaseApplication.java", app)
 
 
+def prepare_rfc9457(project):
+    lesson = blocks("SpringBoot入門/RFC9457エラー応答入門.md")
+    copy_pom = (FIXTURES / "rfc9457-pom.xml").read_text(encoding="utf-8")
+    write(project / "pom.xml", copy_pom)
+    write_java(project, "main", lesson, "Task.java", "TaskRequest.java", "TaskService.java",
+               "TaskNotFoundException.java", "TaskAlreadyCompletedException.java")
+    package = "dev/mikoto2000/springboot/rfc9457"
+    test_file = project / "src/test/java" / package / "TaskServiceTest.java"
+    write(test_file, (FIXTURES / "TaskServiceTest.java").read_text(encoding="utf-8"))
+
+
 def prepare_security(destination, archive):
     if sha256(archive.read_bytes()).hexdigest() != SECURITY_ZIP_SHA256:
         raise ValueError("Security 配布 ZIP の SHA-256 が一致しません")
@@ -129,11 +140,15 @@ def prepare_security(destination, archive):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("destination", type=Path)
-    parser.add_argument("--security-zip", type=Path,
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument("--lesson", choices=["orders", "rfc9457"], default="orders")
+    selection.add_argument("--security-zip", type=Path,
                         help="Security の配布 ZIP。指定時は Security と E2E を生成します。")
     options = parser.parse_args()
     if options.security_zip:
         prepare_security(options.destination, options.security_zip)
+    elif options.lesson == "rfc9457":
+        prepare_rfc9457(options.destination)
     else:
         prepare_orders(options.destination)
 

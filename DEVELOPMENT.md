@@ -70,3 +70,11 @@ mvn -f "$orders_dir/pom.xml" test
 ```
 
 Security と Playwright のプロジェクト生成および実行コマンドは [教材コードの検証ワークフロー](.github/workflows/exercises.yml) を参照してください。
+
+RFC 9457 のタスク完了処理は、同時リクエストで成功が 1 件だけになることも CI で検証します。Docker なしで実行できます。
+
+```bash
+task_dir=$(mktemp -d)
+python3 .github/scripts/prepare-exercises.py "$task_dir" --lesson rfc9457
+mvn -f "$task_dir/pom.xml" test
+```
