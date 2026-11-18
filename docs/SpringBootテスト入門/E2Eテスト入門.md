@@ -251,10 +251,16 @@ test('管理者がユーザーを登録し、そのユーザーでログイン�
   await fillLogin(page, username, password);
   await expect(page).toHaveURL(/\/private(?:\?.*)?$/);
   await expect(page.getByText('これが見えているという事は、認証に成功しています。')).toBeVisible();
+
+  await page.goto('/');
+  await expect(page.getByRole('link', { name: 'ユーザー登録ページ', exact: true })).toHaveCount(0);
+  const denied = await page.goto('/signup');
+  expect(denied?.status()).toBe(403);
 });
 ```
 
 登録成功後の画面遷移だけで終わらず、新しく登録した資格情報で認証できることまで確認します。
+一般ユーザーには登録リンクを表示せず、URL を直接開いても 403 で拒否することを確認します。
 管理者のログアウト後にログイン画面へ戻ることも検証するため、認証状態の混同を避けられます。
 このシナリオの途中でアプリを再起動すると、インメモリー DB の登録情報が消えます。
 
@@ -321,8 +327,8 @@ HTML レポートから失敗したテストを開き、スクリーンショッ
 
 基本の終了条件を達成してから、次の内容に取り組んでください。
 
-1. 登録テストに、一般ユーザーではトップページの登録リンクが表示されない検証を追加する。
-2. 同じ一般ユーザーで `/signup` を直接開き、HTTP ステータスが 403 になることを確認する。
+1. 未ログインで `/signup` を開き、ログイン画面へ移動することを検証する。
+2. 管理者としてログイン後、CSRF トークンを付けずに登録を POST し、403 になることを検証する。
 3. ログイン失敗のシナリオを、意図的な失敗ではなく期待どおりに成功するテストとして追加する。
 
 2では、`const response = await page.goto('/signup')` の戻り値からステータスを取得できます。

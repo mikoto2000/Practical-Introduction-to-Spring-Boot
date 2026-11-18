@@ -40,7 +40,7 @@ docker exec redis-cache-lab redis-cli ping
 
 `pom.xml` の `dependencies` に次の依存関係を追加します。
 
-```xml
+```xml title="Redis の依存関係"
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-data-redis</artifactId>

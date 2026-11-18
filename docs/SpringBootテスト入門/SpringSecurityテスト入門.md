@@ -58,7 +58,7 @@ DB、Thymeleaf、Lombok は使いません。レスポンスを文字列にし�
 `pom.xml` の `dependencies` に次の依存関係があることを確認します。
 バージョンは Spring Boot の依存関係管理に任せます。
 
-```xml
+```xml title="Security テストの依存関係"
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-webmvc-test</artifactId>
