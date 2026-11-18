@@ -27,7 +27,7 @@ Maven / Java / Jar / YAML を選び、Spring Boot は 4.0 系（動作確認は 
 Group は `dev.mikoto2000.springboot`、Artifact は `shipping`、Package name は `dev.mikoto2000.springboot.shipping` です。
 依存関係に Spring Web を選びます。生成した `pom.xml` に `spring-boot-starter-webmvc` があることを確認し、`dependencies` に次の依存関係を追加してください。
 
-```xml
+```xml title="RestClient の依存関係"
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-restclient</artifactId>
