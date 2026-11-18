@@ -1,9 +1,7 @@
 name: Verify teaching examples
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_call:
 
 permissions:
   contents: read
@@ -40,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lesson: [shipping, retry, cache, security-tests]
+        lesson: [shipping, retry, cache, security-tests, project-create, validation, testing, test-design, validation-tests, logging, migration, errors, scheduling]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -77,6 +75,44 @@ jobs:
           mvn --batch-mode --file "$RUNNER_TEMP/lesson/pom.xml"
           -Dspring.data.redis.port=${{ job.services.redis.ports[6379] }} test
 
+  session:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7.4-alpine
+        ports:
+          - 6379/tcp
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Generate session project from the lesson
+        run: python3 .github/scripts/prepare-exercises.py "$RUNNER_TEMP/session" --lesson session
+      - name: Test shared sessions and invalidation with Redis
+        run: >-
+          mvn --batch-mode --file "$RUNNER_TEMP/session/pom.xml"
+          -Dspring.data.redis.port=${{ job.services.redis.ports[6379] }} test
+
+  actuator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Generate Actuator project from the lessons
+        run: python3 .github/scripts/prepare-exercises.py "$RUNNER_TEMP/actuator" --lesson actuator
+      - name: Test database health and HTTP metrics with PostgreSQL
+        run: mvn --batch-mode --file "$RUNNER_TEMP/actuator/pom.xml" test
+
   security-e2e:
     runs-on: ubuntu-latest
     steps:
@@ -102,6 +138,7 @@ jobs:
         working-directory: ${{ runner.temp }}/security/spring-boot-security-workshop-base/e2e
         run: |
           npm ci
+          npm run typecheck
           npx playwright install --with-deps chromium
           npx playwright test --config=playwright.ci.config.ts
       - name: Upload Playwright failure report

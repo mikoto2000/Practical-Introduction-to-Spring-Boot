@@ -79,5 +79,6 @@ class ShippingApiTest {
     mvc.perform(get("/shipping-quotes/empty"))
         .andExpect(status().isBadGateway())
         .andExpect(jsonPath("$.status").value(502));
+    assertEquals(1, upstream.calls("empty"));
   }
 }

@@ -51,6 +51,8 @@ GitHub Pages のビルドには、GitHub Actions のリポジトリ変数 `GA_ID
 npm run textlint
 npm run lint
 npm run check
+npm run typecheck
+npm run check:chapters
 npm run build
 ```
 
@@ -59,7 +61,9 @@ npm run build
 
 ## 教材コードの実行検証
 
-PR では、注文 API の H2・PostgreSQL 統合テストと、Security のログイン・登録・ログアウト・一般ユーザーの登録拒否を Chromium で実行します。CI は教材のコードブロックから一時ディレクトリにプロジェクトを組み立てます。コード例を更新するときは、対応するコードブロックの `title` を変更した場合も生成スクリプトを更新してください。
+PR と main への push では、全22章の主要なコード例を検証します。公開ワークフローから演習検証を呼び出し、サイトのビルドと演習検証の両方が成功してから GitHub Pages へデプロイします。
+CI は教材のコードブロックから一時ディレクトリにプロジェクトを組み立てます。コード例を更新するときは、対応するコードブロックの `title` を変更した場合も生成スクリプトを更新してください。
+追加した章の完全な Java クラスは、同じクラスの置き換え例がある場合、最後の定義を使います。クラスの一覧も照合し、抽出対象の不足をエラーにします。
 
 Java 21、Maven、Python 3、Docker が利用できる環境では、リポジトリのルートから注文 API を検証できます。
 
@@ -71,7 +75,7 @@ mvn -f "$orders_dir/pom.xml" test
 
 Security と Playwright のプロジェクト生成および実行コマンドは [教材コードの検証ワークフロー](.github/workflows/exercises.yml) を参照してください。
 
-RFC 9457 のタスク完了処理は、同時リクエストで成功が 1 件だけになることも CI で検証します。Docker なしで実行できます。
+RFC 9457 は、同時完了が1件だけ成功することに加え、本文の MockMvc テストで HTTP ステータス・メディアタイプ・問題種別・入力違反を検証します。Docker なしで実行できます。
 
 ```bash
 task_dir=$(mktemp -d)
@@ -105,3 +109,28 @@ CI は専用の Redis サービスを起動し、割り当てられたポート�
 
 これらのキャッシュテストは逐次リクエストの動作を検証します。同時更新や複数アプリ間の強い整合性は保証しません。
 教材コードの依存関係やアノテーションを変えた場合は、名前付きコードブロックと生成スクリプトの対応も確認してください。
+
+### その他の章の検証範囲
+
+同じ生成コマンドに次の `--lesson` を指定できます。Maven の実行方法は上記と共通です。
+
+| `--lesson` | 確認する動作 | 追加環境 |
+|---|---|---|
+| `project-create` | 年齢計算 API、日付の変換、未来日付・null の拒否 | なし |
+| `validation` | パラメーターの既定値、形式・長さ制約、DTO の必須制約、不正 JSON | なし |
+| `testing` | 本文の Util・Service・MyBatis・Controller テストと境界値演習 | なし（H2 使用） |
+| `test-design` | 本文の年齢の同値分割・境界値テスト | なし |
+| `validation-tests` | 本文の DTO・Controller・Advice テスト | なし |
+| `logging` | アクセス・AOP・業務ログ、入力の無害化、失敗時の記録、MDC の解放 | なし |
+| `migration` | 本文の2本の SQL の適用、履歴、再実行時のデータ保持 | なし（H2 使用） |
+| `errors` | 本文の8件の HTTP 契約テスト（発展の共通処理を含む） | なし |
+| `scheduling` | 実際のスケジュール起動と複数回の START・END ログ | なし |
+| `session` | 異なるポートの2アプリ間での Cookie による共有と無効化 | Redis |
+| `actuator` | PostgreSQL の停止・復旧時のヘルス、API 応答、ステータス別メトリクス | Docker |
+
+`session` のローカル既定ポートは本文と同じ56379です。CI は専用 Redis の割当ポートを `-Dspring.data.redis.port` で渡します。
+`actuator` は Testcontainers で PostgreSQL を起動するので、本文の手動 Docker コマンドは不要です。
+Security 第1回・第2回・E2E は、既存の配布 ZIP から完成版を生成し、Chromium で検証します。生成した E2E 設定とテストにも `npm run typecheck` を実行します。
+
+全章に検証対象がありますが、すべての演習手順を自動化しているわけではありません。jar の手動起動、プロファイル切替、定期実行の間隔比較、Flyway の並行開発演習などは各章の手順でも確認してください。
+`npm run check:chapters` は教材ファイルと、学習ガイド・サイドバーの章一覧と順序を照合します。新しい章を追加するときは両方の一覧を更新してください。

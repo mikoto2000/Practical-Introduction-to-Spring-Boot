@@ -1,7 +1,12 @@
 {
   "name": "security-workshop-e2e",
   "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit --strict --skipLibCheck --target ES2020 --module ESNext --moduleResolution bundler playwright.config.ts playwright.ci.config.ts tests/auth.spec.ts"
+  },
   "devDependencies": {
-    "@playwright/test": "1.65.1"
+    "@playwright/test": "1.65.1",
+    "@types/node": "^24.0.0",
+    "typescript": "5.9.3"
   }
 }
