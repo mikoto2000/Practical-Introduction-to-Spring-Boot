@@ -41,13 +41,15 @@ class ActuatorTest {
       assertEquals(404, get(client, "/actuator/env").statusCode());
       // Keep the server and its random mapped port alive while denying application
       // connections. Restarting a container can change that port under Testcontainers.
-      try (var admin = DriverManager.getConnection(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword());
-           var statement = admin.createStatement()) {
+      String adminUrl = "jdbc:postgresql://" + postgres.getHost() + ":" + postgres.getMappedPort(5432) + "/postgres";
+      try (var admin = DriverManager.getConnection(adminUrl, postgres.getUsername(), postgres.getPassword());
+           var statement = admin.createStatement();
+           var terminate = admin.prepareStatement("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = ?")) {
         String database = "\"" + postgres.getDatabaseName().replace("\"", "\"\"") + "\"";
         try {
           statement.execute("ALTER DATABASE " + database + " ALLOW_CONNECTIONS false");
-          statement.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity "
-              + "WHERE datname = current_database() AND pid <> pg_backend_pid()");
+          terminate.setString(1, postgres.getDatabaseName());
+          terminate.execute();
           assertEquals(503, get(client, "/actuator/health").statusCode());
           assertEquals(500, get(client, "/orders/99999").statusCode());
         } finally {
