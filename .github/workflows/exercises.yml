@@ -22,6 +22,19 @@ jobs:
       - name: Test the order API with H2 and PostgreSQL
         run: mvn --batch-mode --file "$RUNNER_TEMP/orders/pom.xml" test
 
+  rfc9457:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Generate task service from the lesson
+        run: python3 .github/scripts/prepare-exercises.py "$RUNNER_TEMP/rfc9457" --lesson rfc9457
+      - name: Test atomic task completion
+        run: mvn --batch-mode --file "$RUNNER_TEMP/rfc9457/pom.xml" test
+
   security-e2e:
     runs-on: ubuntu-latest
     steps:
