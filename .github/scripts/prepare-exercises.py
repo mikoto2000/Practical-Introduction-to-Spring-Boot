@@ -5,6 +5,7 @@ from hashlib import sha256
 from pathlib import Path
 import re
 from shutil import copyfile
+from textwrap import dedent
 from zipfile import ZipFile
 
 
@@ -91,10 +92,16 @@ def prepare_orders(project):
 
 def prepare_rfc9457(project):
     lesson = blocks("SpringBoot入門/RFC9457エラー応答入門.md")
-    copy_pom = (FIXTURES / "rfc9457-pom.xml").read_text(encoding="utf-8")
-    write(project / "pom.xml", copy_pom)
+    prepare_web_project(project, "dev.mikoto2000.springboot.rfc9457", "Rfc9457Application",
+                        dependency("spring-boot-starter-validation"))
+    pom = (FIXTURES / "rfc9457-pom.xml").read_text(encoding="utf-8")
+    web_dependencies = dependency("spring-boot-starter-webmvc") + dependency("spring-boot-starter-webmvc-test", scope="test")
+    write(project / "pom.xml", pom.replace("</dependencies>", web_dependencies + "</dependencies>"))
     write_java(project, "main", lesson, "Task.java", "TaskRequest.java", "TaskService.java",
-               "TaskNotFoundException.java", "TaskAlreadyCompletedException.java")
+               "TaskNotFoundException.java", "TaskAlreadyCompletedException.java",
+               "TaskController.java", "Pattern1ExceptionHandler.java",
+               "Pattern2ExceptionHandler.java", "Pattern3ExceptionHandler.java")
+    write_java(project, "test", lesson, "Rfc9457ContractTest.java")
     package = "dev/mikoto2000/springboot/rfc9457"
     test_file = project / "src/test/java" / package / "TaskServiceTest.java"
     write(test_file, (FIXTURES / "TaskServiceTest.java").read_text(encoding="utf-8"))
@@ -167,6 +174,8 @@ def prepare_cache(project, redis=False):
     cache["ProductService.java"] = service
     write_java(project, "main", cache, "CacheApplication.java", "Product.java",
                "ProductStore.java", "ProductService.java", "ProductController.java")
+    if redis:
+        write_java(project, "main", lesson, "RedisCacheConfig.java")
     write(project / "src/main/resources/application.yaml", settings)
     copy_tests(project, package, "CacheApiTest.java")
     if redis:
@@ -185,6 +194,130 @@ def prepare_security_tests(project):
     prepare_web_project(project, package, "SecurityTestApplication", dependencies)
     write_java(project, "main", lesson, "PageController.java", "SecurityConfig.java")
     write_java(project, "test", lesson, "AccessControlTest.java", "LoginLogoutTest.java")
+
+
+def dependency(artifact, group="org.springframework.boot", version=None, scope=None):
+    parts = [f"<groupId>{group}</groupId>", f"<artifactId>{artifact}</artifactId>"]
+    if version:
+        parts.append(f"<version>{version}</version>")
+    if scope:
+        parts.append(f"<scope>{scope}</scope>")
+    return "<dependency>\n" + "\n".join(parts) + "\n</dependency>\n"
+
+
+def lesson_fragments(chapter, language):
+    """Read complete examples, including the indented fences used in early lessons."""
+    text = (ROOT / "docs" / chapter).read_text(encoding="utf-8")
+    fences = re.finditer(r'^( *)```(\w+)(?: title="[^"]+")?\n(.*?)^\1```[ \t]*$', text, re.M | re.S)
+    return [dedent(match[3]) for match in fences if match[2] == language]
+
+
+def lesson_java(chapter, expected):
+    sources = {}
+    for body in lesson_fragments(chapter, "java"):
+        declaration = re.search(r"^(?:public )?(?:abstract )?(?:class|interface|record|@interface) (\w+)", body, re.M)
+        if PACKAGE.search(body) and declaration:
+            # Some chapters replace a complete class as the exercise progresses.
+            # Use its last complete definition, not the introductory version.
+            sources[declaration[1] + ".java"] = body
+    if set(sources) != set(expected):
+        raise ValueError(f"{chapter}: expected Java files {sorted(expected)}, got {sorted(sources)}")
+    return sources
+
+
+ADDITIONAL_LESSONS = {
+    "project-create": ("SpringBoot入門/プロジェクト作成・デプロイ入門.md",
+                       "dev.mikoto2000.workshop.projectcreate", "CalcAgeResponse CalcAgeService CalcAgeController"),
+    "validation": ("SpringBoot入門/バリデーション入門.md",
+                   "dev.mikoto2000.springboot.validation.workshop.firststep",
+                   "EchoController BeanEchoController ValidationExampleBean CalcInfo BatteryStatus RangeEx RangeExValidator BatteryController ValidationError ValidationErrors ValidationExceptionHandler"),
+    "testing": ("SpringBootテスト入門/テスト入門.md", "dev.mikoto2000.springboot.workshop",
+                "User DateTimeUtil UserMapper UserUtil UserUtilTest UserService UserServiceTest UserMapperTest UserController UserControllerTest UserUtilDesignTest"),
+    "test-design": ("SpringBootテスト入門/開発者テスト入門_テストとは編.md",
+                    "dev.mikoto2000.springboot.workshop", "AgeValidator AgeValidatorTest"),
+    "validation-tests": ("SpringBootテスト入門/バリデーションテスト.md",
+                         "dev.mikoto2000.handson.springboot.test.firststep",
+                         "UserCreateRequest UserCreateResponse UserController ApiErrorResponse ValidationErrorDetail ApiExceptionHandler UserCreateRequestTest UserControllerTest ApiExceptionHandlerTest"),
+    "logging": ("SpringBoot入門/ロギング入門.md", "dev.mikoto2000.springboot.logging",
+                "UserService UserController AccessLogFilter LoggingAspect"),
+    "errors": ("SpringBoot入門/例外処理・エラー応答入門.md", "dev.mikoto2000.springboot.errors",
+               "ProductRequest Product ProductNotFoundException DuplicateProductException ProductService ProductController FailureDemoController ApiExceptionHandler ApiExceptionHandlerTest"),
+    "migration": ("SpringBoot入門/DBマイグレーション入門.md", "dev.mikoto2000.springboot.flyway", ""),
+    "session": ("SpringBoot入門/SpringSession入門.md", "dev.mikoto2000.springboot.session", "SessionController"),
+    "scheduling": ("SpringBoot入門/定期実行入門.md", "dev.mikoto2000.springboot.scheduling",
+                   "SchedulingApplication PeriodicTask"),
+}
+
+
+def prepare_additional(project, lesson):
+    chapter, package, names = ADDITIONAL_LESSONS[lesson]
+    sources = lesson_java(chapter, [name + ".java" for name in names.split()])
+    dependencies = dependency("spring-boot-starter-validation")
+    if lesson in ("project-create", "validation", "testing", "validation-tests", "logging"):
+        dependencies += dependency("lombok", "org.projectlombok", scope="provided")
+    if lesson == "testing":
+        dependencies += dependency("mybatis-spring-boot-starter", "org.mybatis.spring.boot", "4.0.0")
+        dependencies += dependency("mybatis-spring-boot-starter-test", "org.mybatis.spring.boot", "4.0.0", "test")
+        dependencies += dependency("h2", "com.h2database", scope="runtime")
+    if lesson == "logging":
+        dependencies += dependency("spring-boot-starter-aspectj")
+    if lesson == "migration":
+        dependencies += dependency("spring-boot-starter-jdbc") + dependency("spring-boot-starter-flyway")
+        dependencies += dependency("spring-boot-h2console") + dependency("h2", "com.h2database", scope="runtime")
+    if lesson == "session":
+        dependencies += dependency("spring-boot-starter-session-data-redis")
+    app = "SchedulingApplication" if lesson == "scheduling" else "LessonApplication"
+    prepare_web_project(project, package, app, dependencies)
+    if "lombok" in dependencies:
+        pom = project / "pom.xml"
+        processors = """
+  <build><plugins><plugin>
+    <groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId>
+    <configuration><annotationProcessorPaths><path>
+      <groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>${lombok.version}</version>
+    </path></annotationProcessorPaths></configuration>
+  </plugin></plugins></build>
+"""
+        write(pom, pom.read_text(encoding="utf-8").replace("</project>", processors + "</project>"))
+    if lesson == "errors":
+        addition = blocks(chapter)["ApiExceptionHandler に追加"]
+        sources["ApiExceptionHandler.java"] = sources["ApiExceptionHandler.java"].rstrip().removesuffix("}") + addition + "}\n"
+    for name in sources:
+        write_java(project, "test" if name.endswith("Test.java") else "main", sources, name)
+    if lesson == "project-create":
+        for name, body in zip(("application.yaml", "application-local-logging.yaml", "application-prod-logging.yaml"), lesson_fragments(chapter, "yaml"), strict=True):
+            write(project / "src/main/resources" / name, body)
+    if lesson == "validation":
+        for name, body in zip(("ValidationMessages.properties", "ValidationMessages_en.properties"), lesson_fragments(chapter, "properties"), strict=True):
+            write(project / "src/main/resources" / name, body)
+    if lesson == "testing":
+        for name, body in zip(("schema.sql", "sql/UserMapperTest-findById.sql"), lesson_fragments(chapter, "sql"), strict=True):
+            write(project / "src/test/resources" / name, body)
+    if lesson == "logging":
+        config = next(body for body in lesson_fragments(chapter, "xml") if body.startswith("<?xml"))
+        write(project / "src/main/resources/logback-spring.xml", config)
+        write(project / "src/main/resources/application-structured.yaml", lesson_fragments(chapter, "yaml")[-1])
+    if lesson == "migration":
+        write(project / "src/main/resources/application.yaml", lesson_fragments(chapter, "yaml")[0])
+        for name, body in zip(("V20260203.01__create_account.sql", "V20260203.02__add_role.sql"), lesson_fragments(chapter, "sql")[:2], strict=True):
+            write(project / "src/main/resources/db/migration" / name, body)
+    if lesson == "session":
+        write(project / "src/main/resources/application.yaml", blocks(chapter)["application.yaml"])
+    fixture = FIXTURES / "lessons" / (lesson + ".java")
+    if fixture.exists():
+        body = fixture.read_text(encoding="utf-8")
+        name = re.search(r"class (\w+)", body)[1] + ".java"
+        write_java(project, "test", {name: body}, name)
+
+
+def prepare_actuator(project):
+    prepare_orders(project)
+    chapter = "SpringBoot入門/Actuator入門.md"
+    pom = project / "pom.xml"
+    write(pom, pom.read_text(encoding="utf-8").replace("</dependencies>", dependency("spring-boot-starter-actuator") + "</dependencies>"))
+    write(project / "src/main/resources/application-actuator-lab.yaml", blocks(chapter)["application-actuator-lab.yaml"])
+    body = (FIXTURES / "lessons/actuator.java").read_text(encoding="utf-8")
+    write_java(project, "test", {"ActuatorTest.java": body}, "ActuatorTest.java")
 
 
 def prepare_security(destination, archive):
@@ -228,7 +361,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("destination", type=Path)
     selection = parser.add_mutually_exclusive_group()
-    selection.add_argument("--lesson", choices=["orders", "rfc9457", "shipping", "retry", "cache", "redis-cache", "security-tests"], default="orders")
+    selection.add_argument("--lesson", choices=["orders", "rfc9457", "shipping", "retry", "cache", "redis-cache", "security-tests", "actuator", *ADDITIONAL_LESSONS], default="orders")
     selection.add_argument("--security-zip", type=Path,
                         help="Security の配布 ZIP。指定時は Security と E2E を生成します。")
     options = parser.parse_args()
@@ -242,6 +375,10 @@ def main():
         prepare_cache(options.destination, redis=options.lesson == "redis-cache")
     elif options.lesson == "security-tests":
         prepare_security_tests(options.destination)
+    elif options.lesson == "actuator":
+        prepare_actuator(options.destination)
+    elif options.lesson in ADDITIONAL_LESSONS:
+        prepare_additional(options.destination, options.lesson)
     else:
         prepare_orders(options.destination)
 

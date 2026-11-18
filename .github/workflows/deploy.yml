@@ -9,6 +9,11 @@ on:
       - main
 
 jobs:
+  exercises:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/exercises.yml
+
   build:
     permissions:
       contents: read
@@ -35,6 +40,11 @@ jobs:
     - name: Check with Biome
       run: npm run check
 
+    - name: Check types and chapter navigation
+      run: |
+        npm run typecheck
+        npm run check:chapters
+
     - name: Build project
       env:
         GA_ID: ${{ vars.GA_ID }}
@@ -48,7 +58,7 @@ jobs:
 
   deploy:
     if: github.event_name == 'push'
-    needs: build
+    needs: [build, exercises]
     concurrency:
       group: github-pages
       cancel-in-progress: false
