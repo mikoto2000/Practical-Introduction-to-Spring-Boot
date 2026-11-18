@@ -71,18 +71,9 @@ jobs:
       - name: Generate Redis cache project from the lesson
         run: python3 .github/scripts/prepare-exercises.py "$RUNNER_TEMP/lesson" --lesson redis-cache
       - name: Test cache eviction and expiration with Redis
-        run: |
-          docker exec ${{ job.services.redis.id }} redis-cli MONITOR > "$RUNNER_TEMP/redis-monitor.log" &
-          monitor_pid=$!
-          set +e
-          mvn --batch-mode --file "$RUNNER_TEMP/lesson/pom.xml" \
-            -Dspring.data.redis.port=${{ job.services.redis.ports[6379] }} \
-            -Dlogging.level.org.springframework.cache.interceptor=TRACE test
-          result=$?
-          kill "$monitor_pid"
-          wait "$monitor_pid" || true
-          cat "$RUNNER_TEMP/redis-monitor.log"
-          exit "$result"
+        run: >-
+          mvn --batch-mode --file "$RUNNER_TEMP/lesson/pom.xml"
+          -Dspring.data.redis.port=${{ job.services.redis.ports[6379] }} test
 
   session:
     runs-on: ubuntu-latest

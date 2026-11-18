@@ -105,8 +105,8 @@ mvn -f "$lesson_dir/pom.xml" test
 
 Redis の検証では、[Redis キャッシュ入門](docs/SpringBoot入門/Redisキャッシュ入門.md) の手順で演習用 Redis を起動してから、`--lesson redis-cache` で生成します。
 既定のポートは 56380 です。別のポートを使う場合は Maven に `-Dspring.data.redis.port=ポート番号` を渡します。
-CI は専用の Redis サービスを起動し、割り当てられたポートを渡します。TTL のテストは論理 DB 1 に分離し、API テストの既定 DB と共有しません。
-テストは `products` キャッシュを削除するため、共有環境の Redis へ接続しないでください。
+CI は専用の Redis サービスを起動し、割り当てられたポートを渡します。テストは `products` キャッシュを削除するため、共有環境の Redis へ接続しないでください。
+Redis の検証では、本文の `RedisCacheConfig` も抽出します。Spring Data Redis 4.0 の非同期書き込み・削除に対し、演習では `immediateWrites()` で完了を待ってから結果を確認します。
 
 これらのキャッシュテストは逐次リクエストの動作を検証します。同時更新や複数アプリ間の強い整合性は保証しません。
 教材コードの依存関係やアノテーションを変えた場合は、名前付きコードブロックと生成スクリプトの対応も確認してください。

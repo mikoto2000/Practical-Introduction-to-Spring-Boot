@@ -76,6 +76,32 @@ import java.io.Serializable;
 public record Product(long id, String name, int priceYen) implements Serializable {}
 ```
 
+Spring Data Redis 4.0 の既定のキャッシュ書き込み・削除は、メソッドが戻ったあとに完了することがあります。
+この演習では、応答の直後にキーの有無や更新後の値を確認するため、Redis の操作完了を待つ設定にします。
+`src/main/java/dev/mikoto2000/springboot/cache/RedisCacheConfig.java` を作成します。
+
+```java title="RedisCacheConfig.java"
+package dev.mikoto2000.springboot.cache;
+
+import org.springframework.boot.cache.autoconfigure.RedisCacheManagerBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheWriter;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+
+@Configuration(proxyBeanMethods = false)
+public class RedisCacheConfig {
+  @Bean
+  RedisCacheManagerBuilderCustomizer immediateRedisWrites(RedisConnectionFactory connectionFactory) {
+    return builder -> builder.cacheWriter(RedisCacheWriter.create(
+        connectionFactory, configurer -> configurer.immediateWrites()));
+  }
+}
+```
+
+キャッシュ名や TTL は、引き続き `application.yaml` の設定を使います。
+この設定でも、同時に進む GET と PUT の競合までは防げません。
+
 前章で付けた `@EnableCaching`、`@Cacheable`、`@CacheEvict` を使います。
 プロジェクトのルートでアプリを起動してください。PowerShell では `.\mvnw.cmd spring-boot:run` を使います。
 
@@ -171,3 +197,4 @@ TTL はキャッシュした値を保持する期間です。この演習の設�
 
 - [Spring Boot 4.0 リファレンス — Caching](https://docs.spring.io/spring-boot/4.0/reference/io/caching.html)
 - [Spring Data Redis 4.0 リファレンス — Redis Cache](https://docs.spring.io/spring-data-redis/reference/4.0/redis/redis-cache.html)
+- [Spring Data Redis 4.0 移行ガイド — Redis Cache](https://docs.spring.io/spring-data-redis/reference/4.0/upgrading.html)

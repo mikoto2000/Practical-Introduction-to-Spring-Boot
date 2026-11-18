@@ -174,6 +174,8 @@ def prepare_cache(project, redis=False):
     cache["ProductService.java"] = service
     write_java(project, "main", cache, "CacheApplication.java", "Product.java",
                "ProductStore.java", "ProductService.java", "ProductController.java")
+    if redis:
+        write_java(project, "main", lesson, "RedisCacheConfig.java")
     write(project / "src/main/resources/application.yaml", settings)
     copy_tests(project, package, "CacheApiTest.java")
     if redis:
