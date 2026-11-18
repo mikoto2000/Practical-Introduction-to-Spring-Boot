@@ -126,10 +126,11 @@ CI は専用の Redis サービスを起動し、割り当てられたポート�
 | `errors` | 本文の8件の HTTP 契約テスト（発展の共通処理を含む） | なし |
 | `scheduling` | 実際のスケジュール起動と複数回の START・END ログ | なし |
 | `session` | 異なるポートの2アプリ間での Cookie による共有と無効化 | Redis |
-| `actuator` | PostgreSQL の停止・復旧時のヘルス、API 応答、ステータス別メトリクス | Docker |
+| `actuator` | PostgreSQL の接続拒否・復旧時のヘルス、API 応答、ステータス別メトリクス | Docker |
 
 `session` のローカル既定ポートは本文と同じ56379です。CI は専用 Redis の割当ポートを `-Dspring.data.redis.port` で渡します。
 `actuator` は Testcontainers で PostgreSQL を起動するので、本文の手動 Docker コマンドは不要です。
+障害は接続の拒否と既存接続の切断で再現し、コンテナーの再起動による割当ポートの変更を避けます。
 Security 第1回・第2回・E2E は、既存の配布 ZIP から完成版を生成し、Chromium で検証します。生成した E2E 設定とテストにも `npm run typecheck` を実行します。
 
 全章に検証対象がありますが、すべての演習手順を自動化しているわけではありません。jar の手動起動、プロファイル切替、定期実行の間隔比較、Flyway の並行開発演習などは各章の手順でも確認してください。

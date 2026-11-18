@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.sql.DriverManager;
 import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.DockerClientFactory;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -39,14 +39,20 @@ class ActuatorTest {
       assertEquals(404, get(client, "/orders/99999").statusCode());
       await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> assertEquals(before + 1, count(client)));
       assertEquals(404, get(client, "/actuator/env").statusCode());
-      var docker = DockerClientFactory.instance().client();
-      try {
-        docker.stopContainerCmd(postgres.getContainerId()).withTimeout(0).exec();
-        assertEquals(503, get(client, "/actuator/health").statusCode());
-        assertEquals(500, get(client, "/orders/99999").statusCode());
-      } finally {
-        // Start the same container so the application's connection settings stay valid.
-        docker.startContainerCmd(postgres.getContainerId()).exec();
+      // Keep the server and its random mapped port alive while denying application
+      // connections. Restarting a container can change that port under Testcontainers.
+      try (var admin = DriverManager.getConnection(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword());
+           var statement = admin.createStatement()) {
+        String database = "\"" + postgres.getDatabaseName().replace("\"", "\"\"") + "\"";
+        try {
+          statement.execute("ALTER DATABASE " + database + " ALLOW_CONNECTIONS false");
+          statement.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity "
+              + "WHERE datname = current_database() AND pid <> pg_backend_pid()");
+          assertEquals(503, get(client, "/actuator/health").statusCode());
+          assertEquals(500, get(client, "/orders/99999").statusCode());
+        } finally {
+          statement.execute("ALTER DATABASE " + database + " ALLOW_CONNECTIONS true");
+        }
       }
       await().atMost(Duration.ofSeconds(60)).untilAsserted(() ->
           assertEquals(200, get(client, "/actuator/health").statusCode()));
