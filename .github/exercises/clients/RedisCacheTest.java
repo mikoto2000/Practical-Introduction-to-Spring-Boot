@@ -11,8 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 
-@SpringBootTest(properties = "spring.cache.redis.time-to-live=1s")
+@SpringBootTest(properties = {
+    "spring.cache.redis.time-to-live=1s",
+    "spring.data.redis.database=1"
+})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class RedisCacheTest {
   @Autowired ProductService service;
   @Autowired CacheManager cacheManager;
