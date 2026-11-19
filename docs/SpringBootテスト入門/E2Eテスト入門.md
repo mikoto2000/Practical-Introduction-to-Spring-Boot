@@ -331,8 +331,17 @@ HTML レポートから失敗したテストを開き、スクリーンショッ
 2. 管理者としてログイン後、CSRF トークンを付けずに登録を POST し、403 になることを検証する。
 3. ログイン失敗のシナリオを、意図的な失敗ではなく期待どおりに成功するテストとして追加する。
 
-2では、`const response = await page.goto('/signup')` の戻り値からステータスを取得できます。
-`expect(response?.status()).toBe(403)` で、URL による拒否も確認できます。
+2では、管理者としてログインした後、次のようにフォームの値だけを POST します。
+
+```typescript
+const response = await page.request.post('/signup', {
+  form: { username: 'csrf-check-user', password: 'E2e-example-123!' },
+});
+expect(response.status()).toBe(403);
+```
+
+`page.request` はブラウザーコンテキストと Cookie を共有するため、管理者の認証状態を引き継ぎます。この POST は画面のフォームを送信せず、CSRF トークンも付けません。
+`page.goto('/signup')` は GET なので、CSRF トークンなしの POST が拒否されることは検証できません。管理者の GET は登録画面を表示します。
 エラーページの具体的な文面には依存させません。
 
 ## 座学で学ぶ E2E テスト
