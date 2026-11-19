@@ -18,7 +18,7 @@ jobs:
       - name: Generate project from the lessons
         run: python3 .github/scripts/prepare-exercises.py "$RUNNER_TEMP/orders"
       - name: Test the order API with H2 and PostgreSQL
-        run: mvn --batch-mode --file "$RUNNER_TEMP/orders/pom.xml" test
+        run: mvn --batch-mode --file "$RUNNER_TEMP/orders/pom.xml" -DfailIfNoTests=true test
 
   rfc9457:
     runs-on: ubuntu-latest
@@ -31,7 +31,7 @@ jobs:
       - name: Generate task service from the lesson
         run: python3 .github/scripts/prepare-exercises.py "$RUNNER_TEMP/rfc9457" --lesson rfc9457
       - name: Test atomic task completion
-        run: mvn --batch-mode --file "$RUNNER_TEMP/rfc9457/pom.xml" test
+        run: mvn --batch-mode --file "$RUNNER_TEMP/rfc9457/pom.xml" -DfailIfNoTests=true test
 
   web-lessons:
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
       - name: Generate project from the lesson
         run: python3 .github/scripts/prepare-exercises.py "$RUNNER_TEMP/lesson" --lesson "${{ matrix.lesson }}"
       - name: Test HTTP behavior, caching or access control
-        run: mvn --batch-mode --file "$RUNNER_TEMP/lesson/pom.xml" test
+        run: mvn --batch-mode --file "$RUNNER_TEMP/lesson/pom.xml" -DfailIfNoTests=true test
 
   redis-cache:
     runs-on: ubuntu-latest
@@ -73,7 +73,7 @@ jobs:
       - name: Test cache eviction and expiration with Redis
         run: >-
           mvn --batch-mode --file "$RUNNER_TEMP/lesson/pom.xml"
-          -Dspring.data.redis.port=${{ job.services.redis.ports[6379] }} test
+          -Dspring.data.redis.port=${{ job.services.redis.ports[6379] }} -DfailIfNoTests=true test
 
   session:
     runs-on: ubuntu-latest
@@ -98,7 +98,7 @@ jobs:
       - name: Test shared sessions and invalidation with Redis
         run: >-
           mvn --batch-mode --file "$RUNNER_TEMP/session/pom.xml"
-          -Dspring.data.redis.port=${{ job.services.redis.ports[6379] }} test
+          -Dspring.data.redis.port=${{ job.services.redis.ports[6379] }} -DfailIfNoTests=true test
 
   actuator:
     runs-on: ubuntu-latest
@@ -111,7 +111,7 @@ jobs:
       - name: Generate Actuator project from the lessons
         run: python3 .github/scripts/prepare-exercises.py "$RUNNER_TEMP/actuator" --lesson actuator
       - name: Test database health and HTTP metrics with PostgreSQL
-        run: mvn --batch-mode --file "$RUNNER_TEMP/actuator/pom.xml" test
+        run: mvn --batch-mode --file "$RUNNER_TEMP/actuator/pom.xml" -DfailIfNoTests=true test
 
   security-e2e:
     runs-on: ubuntu-latest
@@ -133,7 +133,7 @@ jobs:
             --security-zip "$RUNNER_TEMP/security-base.zip"
       - name: Package the Security app
         working-directory: ${{ runner.temp }}/security/spring-boot-security-workshop-base
-        run: bash ./mvnw --batch-mode package
+        run: bash ./mvnw --batch-mode -DfailIfNoTests=true package
       - name: Test login, signup and logout in Chromium
         working-directory: ${{ runner.temp }}/security/spring-boot-security-workshop-base/e2e
         run: |

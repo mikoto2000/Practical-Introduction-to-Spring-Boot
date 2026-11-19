@@ -5,6 +5,7 @@ from hashlib import sha256
 from pathlib import Path
 import re
 from shutil import copyfile
+import sys
 from textwrap import dedent
 from zipfile import ZipFile
 
@@ -248,8 +249,15 @@ ADDITIONAL_LESSONS = {
                    "SchedulingApplication PeriodicTask"),
 }
 
+FIXTURE_LESSONS = frozenset({
+    "project-create", "validation", "logging", "migration", "session", "scheduling",
+})
+
 
 def prepare_additional(project, lesson):
+    fixture = FIXTURES / "lessons" / (lesson + ".java")
+    if lesson in FIXTURE_LESSONS and not fixture.is_file():
+        raise FileNotFoundError(f"{lesson}: required test fixture not found: {fixture}")
     chapter, package, names = ADDITIONAL_LESSONS[lesson]
     sources = lesson_java(chapter, [name + ".java" for name in names.split()])
     dependencies = dependency("spring-boot-starter-validation")
@@ -303,8 +311,7 @@ def prepare_additional(project, lesson):
             write(project / "src/main/resources/db/migration" / name, body)
     if lesson == "session":
         write(project / "src/main/resources/application.yaml", blocks(chapter)["application.yaml"])
-    fixture = FIXTURES / "lessons" / (lesson + ".java")
-    if fixture.exists():
+    if lesson in FIXTURE_LESSONS:
         body = fixture.read_text(encoding="utf-8")
         name = re.search(r"class (\w+)", body)[1] + ".java"
         write_java(project, "test", {name: body}, name)
@@ -358,6 +365,8 @@ def prepare_security(destination, archive):
 
 
 def main():
+    if sys.version_info < (3, 10):
+        raise SystemExit("Python 3.10 or newer is required to generate the exercises.")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("destination", type=Path)
     selection = parser.add_mutually_exclusive_group()
