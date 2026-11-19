@@ -5,11 +5,14 @@
 
 ## 事前準備
 
-Node.js 24 と npm が使える環境で、リポジトリのルート（このファイルと同じ場所）を作業ディレクトリにします。
-まず `node --version` と `npm --version` で、コマンドが実行できることを確認してください。
+Node.js 24・npm と Python 3.10 以上が使える環境で、リポジトリのルート（このファイルと同じ場所）を作業ディレクトリにします。
+まず `node --version`、`npm --version`、`python3 --version` で、コマンドが実行できることを確認してください。WindowsでPythonのコマンドが `python` の場合は、以下の `python3` も読み替えます。
 
-サイトは `@rspress/core 2.0.1` を使います。`npm ci` 後に `npx --no-install rspress --version` で 2.0.1 と表示されることを確認してください。
+サイトは `@rspress/core 2.1.3` を使います。`npm ci` 後に `npx --no-install rspress --version` で 2.1.3 と表示されることを確認してください。
 [Rspress 2 の移行ガイド](https://www.rspress.dev/guide/migration/rspress-1-x) に沿って依存と設定の import を統一しています。
+
+textlint 16.1.1 が指定する Glob 13 系には既知脆弱性があるため、同ツールの依存に限って Glob 14.0.6 以上へ上書きしています。
+textlintを更新する際は、この上書きが引き続き必要か確認し、文章検査も実行してください。
 
 ## セットアップ
 
@@ -53,6 +56,7 @@ npm run lint
 npm run check
 npm run typecheck
 npm run check:chapters
+python3 -m unittest discover -s .github/scripts/tests
 npm run build
 ```
 
@@ -62,10 +66,12 @@ npm run build
 ## 教材コードの実行検証
 
 PR と main への push では、全22章の主要なコード例を検証します。公開ワークフローから演習検証を呼び出し、サイトのビルドと演習検証の両方が成功してから GitHub Pages へデプロイします。
+同じブランチの検証と公開はワークフロー単位で順番に実行します。公開直前にmainの最新SHAを照合し、古いコミットの実行結果は公開しません。
 CI は教材のコードブロックから一時ディレクトリにプロジェクトを組み立てます。コード例を更新するときは、対応するコードブロックの `title` を変更した場合も生成スクリプトを更新してください。
 追加した章の完全な Java クラスは、同じクラスの置き換え例がある場合、最後の定義を使います。クラスの一覧も照合し、抽出対象の不足をエラーにします。
+専用のテスト用ファイルを使う章は、その欠落も生成時にエラーにします。CIのMaven検証では `-DfailIfNoTests=true` を指定し、テスト0件を成功として扱いません。
 
-Java 21、Maven、Python 3、Docker が利用できる環境では、リポジトリのルートから注文 API を検証できます。
+Java 21、Maven、Python 3.10 以上、Docker が利用できる環境では、リポジトリのルートから注文 API を検証できます。
 
 ```bash
 orders_dir=$(mktemp -d)

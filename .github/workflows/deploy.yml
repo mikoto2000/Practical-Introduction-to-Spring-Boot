@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   exercises:
     permissions:
@@ -45,6 +49,9 @@ jobs:
         npm run typecheck
         npm run check:chapters
 
+    - name: Test exercise generation safeguards
+      run: python3 -m unittest discover -s .github/scripts/tests
+
     - name: Build project
       env:
         GA_ID: ${{ vars.GA_ID }}
@@ -63,6 +70,7 @@ jobs:
       group: github-pages
       cancel-in-progress: false
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:
@@ -70,6 +78,20 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+    - name: Check this revision is still current
+      id: revision
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        latest_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')"
+        if [[ "$latest_sha" == "$GITHUB_SHA" ]]; then
+          echo "current=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "current=false" >> "$GITHUB_OUTPUT"
+          echo "Skipping outdated revision $GITHUB_SHA; main is $latest_sha"
+        fi
+
     - name: Deploy to GitHub Pages
       id: deployment
+      if: steps.revision.outputs.current == 'true'
       uses: actions/deploy-pages@v4
