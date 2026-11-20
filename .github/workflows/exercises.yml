@@ -38,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lesson: [shipping, retry, cache, security-tests, project-create, validation, testing, test-design, validation-tests, logging, migration, errors, scheduling]
+        lesson: [shipping, retry, cache, security-tests, project-create, validation, testing, test-design, tdd, validation-tests, logging, migration, errors, scheduling]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4

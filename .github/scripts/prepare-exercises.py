@@ -364,13 +364,28 @@ def prepare_security(destination, archive):
         copyfile(FIXTURES / "playwright" / name, browser_tests / name)
 
 
+def prepare_tdd(project):
+    chapter = "SpringBootテスト入門/AI駆動型TDD入門.md"
+    snippets = blocks(chapter)
+    write(project / "pom.xml", snippets["pom.xml"])
+    sources = {
+        "ShippingFeeCalculator.java": snippets["ShippingFeeCalculator.java（リファクタリング後）"],
+        "ShippingFeeCalculatorTest.java": snippets["src/test/java/dev/mikoto2000/tdd/ShippingFeeCalculatorTest.java"],
+    }
+    additions = [body for body in lesson_fragments(chapter, "java") if body.startswith("@Test")]
+    test = sources["ShippingFeeCalculatorTest.java"]
+    sources["ShippingFeeCalculatorTest.java"] = test.rstrip().removesuffix("}") + "\n" + "\n".join(additions) + "}\n"
+    write_java(project, "main", sources, "ShippingFeeCalculator.java")
+    write_java(project, "test", sources, "ShippingFeeCalculatorTest.java")
+
+
 def main():
     if sys.version_info < (3, 10):
         raise SystemExit("Python 3.10 or newer is required to generate the exercises.")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("destination", type=Path)
     selection = parser.add_mutually_exclusive_group()
-    selection.add_argument("--lesson", choices=["orders", "rfc9457", "shipping", "retry", "cache", "redis-cache", "security-tests", "actuator", *ADDITIONAL_LESSONS], default="orders")
+    selection.add_argument("--lesson", choices=["orders", "rfc9457", "shipping", "retry", "cache", "redis-cache", "security-tests", "actuator", "tdd", *ADDITIONAL_LESSONS], default="orders")
     selection.add_argument("--security-zip", type=Path,
                         help="Security の配布 ZIP。指定時は Security と E2E を生成します。")
     options = parser.parse_args()
@@ -386,6 +401,8 @@ def main():
         prepare_security_tests(options.destination)
     elif options.lesson == "actuator":
         prepare_actuator(options.destination)
+    elif options.lesson == "tdd":
+        prepare_tdd(options.destination)
     elif options.lesson in ADDITIONAL_LESSONS:
         prepare_additional(options.destination, options.lesson)
     else:

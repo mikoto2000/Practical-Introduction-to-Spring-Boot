@@ -49,6 +49,10 @@ export default defineConfig({
           link: '/SpringBootテスト入門/開発者テスト入門_テストとは編',
         },
         {
+          text: 'おまじないから始める AI 駆動型 TDD 入門',
+          link: '/SpringBootテスト入門/AI駆動型TDD入門',
+        },
+        {
           text: 'バリデーションテスト',
           link: '/SpringBootテスト入門/バリデーションテスト',
         },

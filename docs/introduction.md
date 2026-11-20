@@ -60,6 +60,8 @@ E2E テストでは Node.js 24・npm と Playwright 用ブラウザーが必要�
 
 段階 16〜19 は [クライアントシリーズ](#クライアントシリーズ) です。外部 API 連携からリトライへ進みます。キャッシュ入門と Redis キャッシュ入門は共通のプロジェクトで演習します。
 
+AI とテストを書きながら開発の進め方を学ぶ場合は、テスト入門の後に [おまじないから始める AI 駆動型 TDD 入門](./SpringBootテスト入門/AI駆動型TDD入門.md) へ進んでください。独立した Java プロジェクトと AI コーディング支援ツールを使います。
+
 テストの目的から知りたい方は、開発者テスト入門をテスト入門より先に読んでも構いません。
 例外処理・エラー応答の内容を踏まえ、次の RFC 9457 の章では仕様に沿った応答形式の設計を 90 分で学びます。
 AOP、独自制約、構造化ログ、並行開発の運用は発展内容です。まず基本の動作確認まで進めてから戻りましょう。
@@ -99,6 +101,7 @@ Security は ZIP と Java 設定を確認します。Docker を使う章では�
 | 2 | [バリデーション入門](./SpringBoot入門/バリデーション入門.md) | 不正入力を400で拒否 | 90 | 独自制約・多言語対応 |
 | 3 | [テスト入門](./SpringBootテスト入門/テスト入門.md) | Util と Service のテストを実行 | 90 | Repository・Controller（60 分）、章内のテスト設計演習（20〜30 分） |
 | 3 | [開発者テスト入門 - テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md) | 同値分割と境界値でケースを選ぶ | 60 | 状態遷移・Pairwise |
+| 3 | [おまじないから始める AI 駆動型 TDD 入門](./SpringBootテスト入門/AI駆動型TDD入門.md) | 送料計算を TDD で実装し、AI への指示を説明する | 60〜90 | |
 | 4 | [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md) | DTO の境界値と Web の400を検証 | 90 | Advice の独立テスト |
 | 5 | [ロギング入門](./SpringBoot入門/ロギング入門.md) | アクセスログ・MDC・業務ログを確認 | 90 | AOP・構造化ログ |
 | 5 | [DB マイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md) | 2本のマイグレーションと履歴を確認 | 60 | 並行開発・outOfOrder |
@@ -118,7 +121,7 @@ Security は ZIP と Java 設定を確認します。Docker を使う章では�
 | 18 | [キャッシュ入門](./SpringBoot入門/キャッシュ入門.md) | 再取得の省略と、価格更新後のキャッシュの無効化を確認 | 60 | 別商品のキャッシュを確認 |
 | 19 | [Redis キャッシュ入門](./SpringBoot入門/Redisキャッシュ入門.md) | 更新による削除と TTL による期限切れを Redis のキーで確認 | 60 | |
 
-全22章の基本編の目安を合計すると28時間45分〜30時間15分です。事前準備と発展演習の時間は別に確保してください。
+全23章の基本編の目安を合計すると29時間45分〜31時間45分です。事前準備と発展演習の時間は別に確保してください。
 
 テスト入門の発展演習では、実装したコードを使ってテストケースを選びます。開発者テスト入門では、同値分割や境界値分析の考え方を詳しく学びます。
 
@@ -128,24 +131,25 @@ Security は ZIP と Java 設定を確認します。Docker を使う章では�
 2. [バリデーション入門](./SpringBoot入門/バリデーション入門.md)
 3. [テスト入門](./SpringBootテスト入門/テスト入門.md)
 4. [開発者テスト入門 - テストとは編](./SpringBootテスト入門/開発者テスト入門_テストとは編.md)
-5. [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md)
-6. [ロギング入門](./SpringBoot入門/ロギング入門.md)
-7. [DB マイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md)
-8. [DB アクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md)
-9. [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md)
-10. [RFC 9457 エラー返却入門](./SpringBoot入門/RFC9457エラー応答入門.md)
-11. [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md)
-12. [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md)
-13. [Spring Security テスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
-14. [Spring Session 入門](./SpringBoot入門/SpringSession入門.md)
-15. [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
-16. [E2E テスト入門](./SpringBootテスト入門/E2Eテスト入門.md)
-17. [Spring Boot Actuator 入門](./SpringBoot入門/Actuator入門.md)
-18. [定期実行入門](./SpringBoot入門/定期実行入門.md)
+5. [おまじないから始める AI 駆動型 TDD 入門](./SpringBootテスト入門/AI駆動型TDD入門.md)
+6. [バリデーションテスト](./SpringBootテスト入門/バリデーションテスト.md)
+7. [ロギング入門](./SpringBoot入門/ロギング入門.md)
+8. [DB マイグレーション入門](./SpringBoot入門/DBマイグレーション入門.md)
+9. [DB アクセス・トランザクション入門](./SpringBoot入門/DBアクセス・トランザクション入門.md)
+10. [例外処理・エラー応答入門](./SpringBoot入門/例外処理・エラー応答入門.md)
+11. [RFC 9457 エラー返却入門](./SpringBoot入門/RFC9457エラー応答入門.md)
+12. [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md)
+13. [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md)
+14. [Spring Security テスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
+15. [Spring Session 入門](./SpringBoot入門/SpringSession入門.md)
+16. [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
+17. [E2E テスト入門](./SpringBootテスト入門/E2Eテスト入門.md)
+18. [Spring Boot Actuator 入門](./SpringBoot入門/Actuator入門.md)
+19. [定期実行入門](./SpringBoot入門/定期実行入門.md)
 
 ### クライアントシリーズ
 
-19. [外部 API 連携入門](./SpringBoot入門/外部API連携入門.md)
-20. [リトライ入門](./SpringBoot入門/リトライ入門.md)
-21. [キャッシュ入門](./SpringBoot入門/キャッシュ入門.md)
-22. [Redis キャッシュ入門](./SpringBoot入門/Redisキャッシュ入門.md)
+20. [外部 API 連携入門](./SpringBoot入門/外部API連携入門.md)
+21. [リトライ入門](./SpringBoot入門/リトライ入門.md)
+22. [キャッシュ入門](./SpringBoot入門/キャッシュ入門.md)
+23. [Redis キャッシュ入門](./SpringBoot入門/Redisキャッシュ入門.md)
