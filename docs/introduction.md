@@ -137,15 +137,15 @@ Security は ZIP と Java 設定を確認します。Docker を使う章では�
 11. [Spring Security 入門 Vol.1](./SpringSecurity入門/Vol1.md)
 12. [Spring Security 入門 Vol.2](./SpringSecurity入門/Vol2.md)
 13. [Spring Security テスト入門](./SpringBootテスト入門/SpringSecurityテスト入門.md)
-14. [Spring Session 入門 — Redis で HTTP セッションを共有する](./SpringBoot入門/SpringSession入門.md)
+14. [Spring Session 入門](./SpringBoot入門/SpringSession入門.md)
 15. [DB を含む統合テスト入門](./SpringBootテスト入門/DBを含む統合テスト入門.md)
 16. [E2E テスト入門](./SpringBootテスト入門/E2Eテスト入門.md)
 17. [Spring Boot Actuator 入門](./SpringBoot入門/Actuator入門.md)
-18. [Spring Boot 定期実行入門 — fixedRate と fixedDelay](./SpringBoot入門/定期実行入門.md)
+18. [定期実行入門](./SpringBoot入門/定期実行入門.md)
 
 ### クライアントシリーズ
 
-19. [Spring Boot 外部 API 連携入門 — RestClient とタイムアウト](./SpringBoot入門/外部API連携入門.md)
-20. [Spring Boot リトライ入門 — 条件・回数・待ち時間](./SpringBoot入門/リトライ入門.md)
-21. [Spring Boot キャッシュ入門 — 再取得の省略と更新時の無効化](./SpringBoot入門/キャッシュ入門.md)
-22. [Spring Boot Redis キャッシュ入門 — 削除と TTL](./SpringBoot入門/Redisキャッシュ入門.md)
+19. [外部 API 連携入門](./SpringBoot入門/外部API連携入門.md)
+20. [リトライ入門](./SpringBoot入門/リトライ入門.md)
+21. [キャッシュ入門](./SpringBoot入門/キャッシュ入門.md)
+22. [Redis キャッシュ入門](./SpringBoot入門/Redisキャッシュ入門.md)
