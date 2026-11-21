@@ -6,7 +6,7 @@ title: おまじないから始める AI 駆動型 TDD 入門
 
 ## 講義の区切り
 
-目安は 60〜90 分です。終了条件は「送料計算を小さなサイクルで実装し、AI の進め方を自分の言葉で指示できること」です。
+目安は、環境構築などの事前準備を除いて 60〜90 分です。終了条件は「送料計算を小さなサイクルで実装し、AI の進め方を自分の言葉で指示できること」です。
 準備と前後の章は [学習ガイド](../introduction.md) で確認できます。
 
 ## 概要
@@ -34,7 +34,7 @@ JUnit が初めてなら、先に [テスト入門の「Util のテスト」](./
 次を用意します。
 
 - JDK 21 と Maven 3.9 系
-- ファイルの編集とテスト実行ができる AI コーディング支援ツール
+- ファイルの編集とテスト実行ができる AI コーディング支援ツール（エージェント型 CLI やエディター統合型など）
 - Git と、変更内容を確認できるエディター
 
 この演習は普通の Java クラスで進めます。Spring の起動、Web API、DB は使いません。
@@ -105,8 +105,8 @@ AI に、次のプロンプトを渡します。
 送料は通常500円、商品合計が3,000円以上なら無料です。
 商品合計は0以上の整数とし、負数や通貨換算は今回の対象外です。
 
-t_wada の TDD に則り、Red → Green → Refactoring のサイクルを短く回し、
-コミットしていってください。
+t_wada の TDD に則り、Red → Green → Refactoring のサイクルを短く回してください。
+コミットは私が行うので、AI はファイルの変更とテスト実行までを担当してください。
 
 まず期待する動作をテストリストにしてください。
 今回は学習のため、最初のテストを追加して実行したところで止まり、
@@ -116,6 +116,17 @@ t_wada の TDD に則り、Red → Green → Refactoring のサイクルを短�
 AI が一度に完成させてしまわないよう、学習中は段階ごとに止めます。
 次の章から、手元の変更とテスト結果を確認しながら先へ進めてください。
 本文のコードは各段階の確認用です。先に完成版をまとめて貼り付けず、一段階ずつ試しましょう。
+この演習では、あなたが仕様と差分・実行結果を確認し、次へ進む指示とコミットを担当します。
+AI にはテストと実装の編集・実行を頼み、確認の区切りごとに止まってもらいます。
+
+| 章 | あなたが行うこと | AI に頼むこと |
+|---|---|---|
+| 1 | プロンプトを渡し、テストリストを確認する | テストリストの作成、最初のテストの追加・実行 |
+| 2 | コンパイルエラーと期待値の不一致を区別し、成功後に差分を確認してコミットする | 骨組みの作成・実行、確認後の Green の実装・実行 |
+| 3 | 新しいテストの失敗を確認し、実装を指示する。成功後に差分を確認してコミットする | テストの追加・実行、確認後の実装変更・実行 |
+| 4 | ケースを1つずつ選び、結果と差分を確認してコミットする | 各テストの追加・実行、条件式を一時変更する確認演習 |
+| 5 | 動作と差分を確認してコミットする | リファクタリングと変更前後のテスト実行 |
+| 6〜7 | AI への指示とプロンプトを自分の言葉で書く | 作業の依頼は不要 |
 
 ### 期待する動作をリストにする
 
@@ -135,8 +146,9 @@ AI が一度に完成させてしまわないよう、学習中は段階ごと�
 
 ### Red：期待する動作を1つのテストにする
 
-最初に「商品合計が1,000円なら送料は500円」を選びます。
-次のファイルを作ります。ディレクトリも package 宣言に合わせて作成してください。
+第1章で AI が追加した最初のテストを開き、次の例と照合してください。
+この演習では「商品合計が1,000円なら送料は500円」から進めます。AI が別のケースを選んだ場合は、このケースに変更して再実行するよう頼みます。
+ファイルの配置と package 宣言も確認します。同じファイルを作り直す必要はありません。
 
 ```java title="src/test/java/dev/mikoto2000/tdd/ShippingFeeCalculatorTest.java"
 package dev.mikoto2000.tdd;
@@ -155,7 +167,9 @@ class ShippingFeeCalculatorTest {
 }
 ```
 
-テストを実行します。
+AI が実行したコマンドと結果を確認します。この演習で使うコマンドは次のとおりです。
+`-DfailIfNoTests=true` は、テストが1件も見つからない場合にビルドを失敗させる指定です。
+テストの配置などを誤り、0件のまま成功したと受け取ることを防ぎます。
 
 ```bash
 mvn -DfailIfNoTests=true test
@@ -163,7 +177,7 @@ mvn -DfailIfNoTests=true test
 
 まだ対象のクラスがないので、コンパイルエラーになります。
 これは必要なクラスがないことを示しています。期待値と実際の計算結果を比べる段階には、まだ到達していません。
-次の骨組みを作り、同じコマンドをもう一度実行します。
+AI に次の骨組みを作って同じコマンドを実行し、結果を報告して止まるよう頼みます。
 
 ```java title="src/main/java/dev/mikoto2000/tdd/ShippingFeeCalculator.java"
 package dev.mikoto2000.tdd;
@@ -196,15 +210,21 @@ AI には、次のように続けて指示できます。
 
 ### Green：今のテストを通す
 
-`calculate` の本体を、次のように変更します。
+AI が変更した `calculate` の本体を確認します。この段階の実装例は次のとおりです。
 
-```java
+```java title="ShippingFeeCalculator.java（Green のメソッド本体）"
 public int calculate(int subtotal) {
   return 500;
 }
 ```
 
-テストを再実行し、1件が成功することを確認します。
+AI の再実行結果を読み、1件が成功することを確認します。確認すべき出力の例は次のとおりです。
+
+```text
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+```
+
+`Tests run` が期待する件数であり、`Failures`・`Errors`・`Skipped` がすべて0であることを確認します。
 引数を使っていないことに、違和感はあるでしょうか。
 今のテストには十分ですが、送料計算全体の完成ではありません。次の振る舞いは次の一周で実現します。
 固定値を返す実装は、歩幅を小さくするための選択です。TDD で毎回固定値から始める必要があるわけではありません。
@@ -229,9 +249,9 @@ git commit -m "Return standard shipping fee for a 1000 yen subtotal"
 
 次は「商品合計が3,000円なら送料は0円」を選びます。
 AI には、次のテストを追加して失敗を確認するところまで頼みます。
-以下のメソッドは既存の `ShippingFeeCalculatorTest` クラスの中に追加してください。
+追加先は既存の `ShippingFeeCalculatorTest` クラスの中です。AI の変更を次の例と照合してください。
 
-```java
+```java title="ShippingFeeCalculatorTest.java に追加（3000円）"
 @Test
 void 商品合計が3000円なら送料は0円() {
   ShippingFeeCalculator calculator = new ShippingFeeCalculator();
@@ -240,10 +260,10 @@ void 商品合計が3000円なら送料は0円() {
 }
 ```
 
-同じ Maven コマンドを実行します。今の実装は常に500を返すので、テスト2件のうち新しい1件が失敗します。
-期待値0、実際の値500であることを確認したら、実装を次のように変更します。
+AI に同じ Maven コマンドを実行してもらいます。今の実装は常に500を返すので、テスト2件のうち新しい1件が失敗します。
+期待値0、実際の値500であることを確認したら、AI に実装の変更と再実行を頼みます。実装例は次のとおりです。
 
-```java
+```java title="ShippingFeeCalculator.java（送料無料の条件を追加）"
 public int calculate(int subtotal) {
   if (subtotal >= 3000) {
     return 0;
@@ -266,29 +286,39 @@ public int calculate(int subtotal) {
 
 ここで、次の問いを考えてから AI と作業しましょう。
 
-> `subtotal >= 3000` を `subtotal == 3000` に変えても、今のテストは通りませんか。
+> `subtotal >= 3000` を `subtotal == 3000` に変えると、今の2件のテスト結果はどうなるでしょうか。
 
 今ある入力は1,000円と3,000円だけです。どちらの条件式でも、この2件は成功します。
 すべて緑でも、テストでまだ区別できない間違いがあります。
 
-テストリストから、2,999円、3,001円、0円のケースを1つずつ選び、次のテストを追加します。
-各追加後にテストを実行し、結果を確認してから次へ進んでください。
+テストリストから、2,999円、3,001円、0円のケースを1つずつ選び、AI にテストの追加と実行を頼みます。
+追加先は、既存の `ShippingFeeCalculatorTest` クラスの中です。各追加後に結果を確認してから次へ進んでください。
 
-```java
+まず2,999円のケースを追加します。`Tests run: 3` となり、全3件が成功することを確認します。
+
+```java title="ShippingFeeCalculatorTest.java に追加（2999円）"
 @Test
 void 商品合計が2999円なら送料は500円() {
   ShippingFeeCalculator calculator = new ShippingFeeCalculator();
 
   assertEquals(500, calculator.calculate(2999));
 }
+```
 
+次に3,001円のケースを追加します。`Tests run: 4` となり、全4件が成功することを確認します。
+
+```java title="ShippingFeeCalculatorTest.java に追加（3001円）"
 @Test
 void 商品合計が3001円なら送料は0円() {
   ShippingFeeCalculator calculator = new ShippingFeeCalculator();
 
   assertEquals(0, calculator.calculate(3001));
 }
+```
 
+最後に0円のケースを追加します。`Tests run: 5` となり、全5件が成功することを確認します。
+
+```java title="ShippingFeeCalculatorTest.java に追加（0円）"
 @Test
 void 商品合計が0円なら送料は500円() {
   ShippingFeeCalculator calculator = new ShippingFeeCalculator();
@@ -300,12 +330,62 @@ void 商品合計が0円なら送料は500円() {
 `>=` で実装していれば、追加したテストは最初から通ります。
 既存の動作を確かめるテストの追加なので、失敗させるために実装を変更する必要はありません。
 
-確認の演習として、一時的に `>=` を `==` に変えて実行してみましょう。
-3,001円のテストが失敗するはずです。確認できたら必ず `>=` に戻し、全5件が通ることを確認します。
+確認の演習として、AI に一時的に `>=` を `==` に変えて実行し、結果を報告して止まるよう頼みます。
+3,001円のテストが失敗するはずです。確認できたら必ず `>=` に戻して再実行するよう頼み、全5件が通ることを確認します。
 テストリストを更新し、正しい実装と追加したテストをコミットしてください。
 
 **Green は、書いたテストの範囲で期待を満たした状態です。**
 仕様を十分に確かめているかは、人間も考える必要があります。
+
+### 5件そろったテストの確認
+
+ここまでのテストクラス全体を再掲します。5ケースがそろい、すべて成功することを確認してください。
+メソッドを並べる順序は問いません。
+
+```java title="ShippingFeeCalculatorTest.java（5件そろった状態）"
+package dev.mikoto2000.tdd;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
+class ShippingFeeCalculatorTest {
+  @Test
+  void 商品合計が1000円なら送料は500円() {
+    ShippingFeeCalculator calculator = new ShippingFeeCalculator();
+
+    assertEquals(500, calculator.calculate(1000));
+  }
+
+  @Test
+  void 商品合計が3000円なら送料は0円() {
+    ShippingFeeCalculator calculator = new ShippingFeeCalculator();
+
+    assertEquals(0, calculator.calculate(3000));
+  }
+
+  @Test
+  void 商品合計が2999円なら送料は500円() {
+    ShippingFeeCalculator calculator = new ShippingFeeCalculator();
+
+    assertEquals(500, calculator.calculate(2999));
+  }
+
+  @Test
+  void 商品合計が3001円なら送料は0円() {
+    ShippingFeeCalculator calculator = new ShippingFeeCalculator();
+
+    assertEquals(0, calculator.calculate(3001));
+  }
+
+  @Test
+  void 商品合計が0円なら送料は500円() {
+    ShippingFeeCalculator calculator = new ShippingFeeCalculator();
+
+    assertEquals(500, calculator.calculate(0));
+  }
+}
+```
 
 ## 5. Refactoring：動作を守りながら読みやすくする
 
@@ -335,9 +415,9 @@ public class ShippingFeeCalculator {
 }
 ```
 
-このコードで元の `src/main/java/dev/mikoto2000/tdd/ShippingFeeCalculator.java` を置き換えます。
+AI が元の `src/main/java/dev/mikoto2000/tdd/ShippingFeeCalculator.java` を変更したことを確認します。
 新しいファイルを追加する操作ではありません。
-テストを実行し、全5件が成功することを確認します。
+変更前後のテスト実行結果を読み、全5件が成功することを確認します。
 テストの期待値は変えません。500や3,000という具体的な仕様を確認するためです。
 
 | 変更 | この演習での例 |
@@ -384,7 +464,7 @@ AI から、次の報告がありました。
 
 ## 7. おまじないを自分の言葉にする
 
-最後に、冒頭のプロンプトを書き直してみます。
+最後に、冒頭のプロンプトを書き直してみます。コミットは引き続きあなたが担当します。
 
 ```text
 送料計算機能を Java で実装してください。
@@ -399,13 +479,23 @@ AI から、次の報告がありました。
 5. それまでに書いたテストも含めて、すべて通ることを確認する。
 6. 動作を保ったまま改善できる点を検討し、必要ならリファクタリングする。
 7. 変更後もテストを実行し、差分を確認する。
-8. テストリストを更新し、テストが通った意味のある区切りでコミットする。
-9. リストに残る次の振る舞いへ進む。
+8. テストリストを更新し、結果を報告して止まる。コミットは私が行う。
+9. 私の指示を受けて、リストに残る次の振る舞いへ進む。
 
 既存の実装がすでに満たすケースは、確認用のテストとして追加し、結果を報告してください。
 各サイクルで、選んだ振る舞いとテストの実行コマンド・件数・結果を簡潔に報告してください。
 テストを実行できない場合は、その旨を明示してください。
 ```
+
+冒頭の指示を、各段階で確認できる手順に書き直しました。
+
+| 冒頭の指示 | 書き直して明示したこと |
+|---|---|
+| 「TDD に則り、短く回す」 | 振る舞いを1つ選び、意図した失敗と既存テストの成功を確認する |
+| 「Red → Green → Refactoring」 | 動作を保つ改善を検討し、変更後もテストと差分を確認する |
+| 最初のテスト実行後に止まる | 各サイクルで止まり、人間がコミットして次の指示を出す |
+| 結果を報告する | 選んだ振る舞い・実行コマンド・件数・結果を報告し、実行できない場合も明示する |
+| 既存実装が満たすケースの扱いは未指定 | 確認用のテストとして追加し、結果を報告する |
 
 ### 振り返り
 
